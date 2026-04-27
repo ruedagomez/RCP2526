@@ -1345,6 +1345,33 @@ body {
 
 <script>
 // Player data from Excel extraction
+  const fotosDropbox = {
+  1:  'https://www.dropbox.com/scl/fi/jwdg75rb8ge825812recy/YDRAY-1.-MANU-LOPEZ-725x1024.png?rlkey=2h1v72v7v8ipm3b3hlc5i251v&raw=1',
+  2:  'https://www.dropbox.com/scl/fi/a5yqsnpdl5mmp328upxy4/YDRAY-2.-CARMELO-609x1024.png?rlkey=ldoaj7bzdax4lrboinftdrp60&raw=1',
+  4:  'https://www.dropbox.com/scl/fi/1r5u3ajhotywmjecmp55p/YDRAY-4.-KEVIN-GIL-603x1024.png?rlkey=g5f4lkdn48i1oz48jr2t2jdkd&raw=1',
+  5:  'https://www.dropbox.com/scl/fi/etm5zc6reu8b43sk79o31/YDRAY-5.-FERNANDO-569x1024.png?rlkey=8cr2rymjx4iany8k1jv9zxv8i&raw=1',
+  6:  'https://www.dropbox.com/scl/fi/30r20yuh6pdn4dfn18xih/YDRAY-6.-ALBERTO-DURAN-631x1024.png?rlkey=ok8rqekknlz39f59o0if60cru&raw=1',
+  7:  'https://www.dropbox.com/scl/fi/kbibvjqphsdalt5jpdnl8/YDRAY-7.-MANU-HEREDIA-647x1024.png?rlkey=vxo4mk857hgs5yqq70ykwdb2l&raw=1',
+  8:  'https://www.dropbox.com/scl/fi/6eht56hc3hbz7zssgv1nb/YDRAY-8.-KEVIN-BONILLA-569x1024.png?rlkey=yg2d2894cdw13xwb3jsk9632y&raw=1',
+  9:  'https://www.dropbox.com/scl/fi/5k6kytoqfdtdiorbtmj4m/YDRAY-9.-JAVI-TAMAYO-645x1024.png?rlkey=qm8qnnuxbwhjok2ektayf5in0&raw=1',
+  10: 'https://www.dropbox.com/scl/fi/jfbtgcusdy8c0rxvbvx47/YDRAY-10.-CHICHO-623x1024.png?rlkey=oevfcp3vsqynrwfw626m2ymgm&raw=1',
+  11: 'https://www.dropbox.com/scl/fi/s688mnl52kgi25csmf2z6/YDRAY-11.-MANU-MORENO-DFC-629x1024.png?rlkey=fm4z5f7hkuednxrlfp36xwkkp&raw=1',
+  13: 'https://www.dropbox.com/scl/fi/9txhbenzl7us2hnnajmsz/YDRAY-13.-JUANMA-739x1024.png?rlkey=qveiktuuq1xwe8taopam41u8u&raw=1',
+  14: 'https://www.dropbox.com/scl/fi/md8xefawki7yyey7149i4/YDRAY-14.-ADRI-ROMERO-626x1024.png?rlkey=an7i71dthndd711e9j95wocd1&raw=1',
+  15: 'https://www.dropbox.com/scl/fi/xs5su78htbtztqt57quxy/YDRAY-15.-RODRI-584x1024.png?rlkey=ekm8fpwospmsza9bgvak1bo2i&raw=1',
+  16: 'https://www.dropbox.com/scl/fi/pycme8h1l73avr5x21xlk/YDRAY-16.-BORJA-JIMENEZ-671x1024.png?rlkey=w91ava6hhxj8i69eihqw1jx8u&raw=1',
+  17: 'https://www.dropbox.com/scl/fi/qr21i081mbz89xrajekza/YDRAY-17.-FRAN-JIMENEZ-670x1024.png?rlkey=yc6hk6ybltt3fvxjdsj8nnoht&raw=1',
+  18: 'https://www.dropbox.com/scl/fi/1texddqyiyzeph1p64o85/YDRAY-18.-ANTONIO-OCA-576x1024.png?rlkey=iq6f53g24ncghkswh8z8rkul2&raw=1',
+  19: 'https://www.dropbox.com/scl/fi/gkx2xaa322vg6ml2x9nlo/YDRAY-19.-ANTONIO-TOCINO-712x1024.png?rlkey=yi89l13n0ez7acwx1dplvvjgu&raw=1',
+  20: 'https://www.dropbox.com/scl/fi/jmq2nvhlog0fnqjx34vtl/YDRAY-20.-ROBERTO-BARBA-627x1024.png?rlkey=c69vgth1klqg4ekchtkl6vdiu&raw=1',
+  21: 'https://www.dropbox.com/scl/fi/2jceg9smc1c791bbncgle/YDRAY-21.-FRAN-GARCIA-683x1024.png?rlkey=f9x2jbbk0cqfwoqxogxofppm3&raw=1',
+  24: 'https://www.dropbox.com/scl/fi/i15z0v7tam6u4cl6j802y/YDRAY-24.-JACOBO-714x1024.png?rlkey=yh9ywqzd4dzu11bwxzkkv1uvo&raw=1',
+  26: 'https://www.dropbox.com/scl/fi/vhgyznj3yd4p0qo2o4oxj/YDRAY-26.-ELIAS-PALACIO-596x1024.png?rlkey=0fgqa6mb95gyrt509aann0h1n&raw=1',
+  27: 'https://www.dropbox.com/scl/fi/tn08zwtb2pxh0vujsbyqw/YDRAY-27.-PEPE-SAINZ-596x1024.png?rlkey=xker4348h7qw6ow04vb6d2t2a&raw=1',
+  28: 'https://www.dropbox.com/scl/fi/kcffzj2zmhwivobr35ce8/YDRAY-28.-ADRI-CUEVAS-692x1024.png?rlkey=mghsgg8oodi6c7xzszaoq2kev&raw=1',
+  30: 'https://www.dropbox.com/scl/fi/3ai9cqhrcj43crhqexozy/YDRAY-30.-HUGO-RODRIGUEZ-596x1024.png?rlkey=nmqxnjvbw4rorfcp014kz5ap7&raw=1',
+  42: 'https://www.dropbox.com/scl/fi/jnpof7iri0iwjnls0wtp1/YDRAY-42.-LAINEZ-627x1024.png?rlkey=sydym94lf3pp24y7wfc65ni67&raw=1',
+};
 const players = [
   {d:1,n:"López García, Manuel",t:9,s:19,g:0,a:0,r:0,jt:[1,6,7,9,11,13,15,23,25],js:[2,3,4,5,8,10,12,14,16,17,18,19,20,21,22,24,26,27,28],staff:false},
   {d:2,n:"Humanes Porras, Carmelo Manuel",t:14,s:3,g:0,a:2,r:0,jt:[],js:[],staff:false},
@@ -1430,11 +1457,14 @@ document.querySelectorAll('.nav-item').forEach(item => {
 const grid = document.getElementById('playerGrid');
 players.forEach(p => {
   const initials = p.n.split(',')[0].substring(0,2).toUpperCase();
-  const pj = p.t + p.s;
-  grid.innerHTML += `
+const fotoUrl = fotosDropbox[p.d] || '';
+const pj = p.t + p.s;
+grid.innerHTML += `
     <div class="player-card ${p.staff ? 'staff-card' : ''}" onclick="showPlayer(${players.indexOf(p)})">
       <div class="dorsal">${p.d}</div>
-      <div class="photo-placeholder">${initials}</div>
+      <div class="photo-placeholder" style="${fotoUrl ? 'background:none;border:none;padding:0;overflow:hidden;' : ''}">
+        ${fotoUrl ? `<img src="${fotoUrl}" style="width:100%;height:100%;object-fit:cover;object-position:top;border-radius:50%;" onerror="this.parentElement.innerHTML='${initials}'">` : initials}
+      </div>
       <div class="name">${p.n.split(',')[0]}</div>
       <div class="dorsal-label">Dorsal ${p.d}</div>
       <div class="stats-row">
