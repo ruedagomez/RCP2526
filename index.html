@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Racing Club Portuense · Informe de Temporada 25/26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --racing-blue: #003D7A;
+  --racing-blue-light: #0058B0;
+  --racing-gold: #C8A84E;
+  --racing-gold-light: #E0C877;
+  --bg-dark: #0A0E17;
+  --bg-card: #111827;
+  --bg-card-hover: #1A2332;
+  --bg-sidebar: #070B12;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border: #1E293B;
+  --accent-green: #22C55E;
+  --accent-red: #EF4444;
+  --accent-amber: #F59E0B;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.club-crest {
+  width: 48px; height: 48px;
+  background: var(--racing-blue);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--racing-gold);
+  letter-spacing: 1px;
+  border: 2px solid var(--racing-gold);
+  flex-shrink: 0;
+}
+
+.club-info h2 {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.club-info span {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 16px 12px 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  position: relative;
+}
+
+.nav-item:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, var(--racing-blue), var(--racing-blue-light));
+  color: white;
+  font-weight: 600;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--racing-gold);
+  border-radius: 3px;
+}
+
+.nav-icon {
+  width: 20px;
+  text-align: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.nav-badge {
+  margin-left: auto;
+  font-size: 10px;
+  background: var(--racing-blue);
+  color: var(--racing-gold);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-footer span {
+  color: var(--racing-gold);
+  font-weight: 700;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  margin-left: 260px;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.main::-webkit-scrollbar { width: 6px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ===== PAGE SECTIONS ===== */
+.page-section {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+.page-section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== PORTADA ===== */
+.portada {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.portada::before {
+  content: '';
+  position: absolute;
+  top: -30%; right: -20%;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(0,61,122,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.portada::after {
+  content: '';
+  position: absolute;
+  bottom: -20%; left: 20%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(200,168,78,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.portada-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--racing-gold);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.portada h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 8vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.portada h1 .gold { color: var(--racing-gold); }
+
+.portada-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+.portada-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  position: relative;
+  z-index: 1;
+}
+
+.portada-stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.portada-stat:hover {
+  border-color: var(--racing-blue);
+  transform: translateY(-2px);
+}
+
+.portada-stat .value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.portada-stat .value.green { color: var(--accent-green); }
+.portada-stat .value.red { color: var(--accent-red); }
+.portada-stat .value.amber { color: var(--accent-amber); }
+.portada-stat .value.gold { color: var(--racing-gold); }
+
+.portada-stat .label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  padding: 40px 48px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.section-header .tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--racing-gold);
+  margin-bottom: 8px;
+}
+
+.section-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.section-header p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  max-width: 600px;
+}
+
+/* ===== CONTENT AREA ===== */
+.content-area {
+  padding: 0 48px 48px;
+}
+
+/* ===== PLAYER GRID ===== */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.player-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-card:hover {
+  border-color: var(--racing-blue);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,61,122,0.2);
+}
+
+.player-card .dorsal {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: rgba(255,255,255,0.06);
+  position: absolute;
+  top: 8px; right: 12px;
+  line-height: 1;
+}
+
+.player-card .photo-placeholder {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--racing-blue), var(--racing-blue-light));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: var(--racing-gold);
+  margin-bottom: 14px;
+  border: 2px solid var(--racing-gold-light);
+}
+
+.player-card .name {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.player-card .dorsal-label {
+  font-size: 11px;
+  color: var(--racing-gold);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.player-card .stats-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.player-card .mini-stat {
+  text-align: center;
+}
+
+.player-card .mini-stat .val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.player-card .mini-stat .lbl {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.player-card.staff-card {
+  border-color: rgba(200,168,78,0.2);
+  background: linear-gradient(135deg, var(--bg-card), rgba(200,168,78,0.03));
+}
+
+.player-card.staff-card .dorsal-label::after {
+  content: ' · CT';
+  color: var(--text-muted);
+}
+
+/* ===== COMPARATIVAS ===== */
+.compare-selector {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.compare-selector select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  min-width: 220px;
+  cursor: pointer;
+}
+
+.compare-selector select:focus {
+  outline: none;
+  border-color: var(--racing-blue);
+}
+
+.vs-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: var(--racing-gold);
+}
+
+.radar-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.radar-placeholder {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 350px;
+  position: relative;
+}
+
+.radar-placeholder svg { width: 100%; max-width: 320px; }
+
+/* ===== MINUTES TIMELINE ===== */
+.minutes-grid {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.minutes-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.minutes-table th {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg-dark);
+}
+
+.minutes-table td {
+  padding: 6px 4px;
+  text-align: center;
+}
+
+.minutes-table .player-name-cell {
+  text-align: left;
+  padding-left: 12px;
+  font-weight: 600;
+  font-size: 11px;
+  white-space: nowrap;
+  position: sticky;
+  left: 0;
+  background: var(--bg-dark);
+  z-index: 1;
+}
+
+.jornada-cell {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.jornada-cell.titular { background: var(--racing-blue); }
+.jornada-cell.suplente { background: rgba(0,61,122,0.35); border: 1px solid var(--racing-blue); }
+.jornada-cell.no-juega { background: var(--border); }
+
+/* ===== GOALS CATALOG ===== */
+.goals-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.goal-entry {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.goal-entry:hover {
+  border-color: var(--racing-gold);
+}
+
+.goal-jornada {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--text-muted);
+  min-width: 50px;
+  text-align: center;
+}
+
+.goal-minute {
+  background: var(--racing-blue);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  min-width: 36px;
+  text-align: center;
+}
+
+.goal-scorer {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.goal-video-btn {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--racing-gold);
+  border: 1px solid var(--racing-gold);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ===== TACTICAL SECTION ===== */
+.formation-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.formation-block h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.formation-block .period {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.pitch-placeholder {
+  background: linear-gradient(180deg, #1a5c2a 0%, #1f6e32 50%, #1a5c2a 100%);
+  border-radius: var(--radius-sm);
+  aspect-ratio: 3/4;
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.3);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== TEAM ANALYSIS ===== */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.stat-card-lg {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.stat-card-lg .title {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.stat-card-lg .big-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  line-height: 1;
+}
+
+.stat-card-lg .sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ===== CHART PLACEHOLDERS ===== */
+.chart-placeholder {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-placeholder .chart-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.chart-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding-top: 16px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(180deg, var(--racing-blue) 0%, var(--racing-blue-light) 100%);
+  border-radius: 3px 3px 0 0;
+  min-height: 8px;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.chart-bar:hover {
+  background: var(--racing-gold);
+}
+
+.chart-bar .bar-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ===== MARKET TAB ===== */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.coming-soon .icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.coming-soon h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--text-secondary);
+}
+
+.coming-soon p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ===== WIREFRAME BADGE ===== */
+.wireframe-badge {
+  position: fixed;
+  top: 16px; right: 16px;
+  background: var(--racing-gold);
+  color: var(--bg-dark);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  z-index: 200;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.filter-btn:hover { border-color: var(--racing-blue); color: var(--text-primary); }
+.filter-btn.active {
+  background: var(--racing-blue);
+  border-color: var(--racing-blue);
+  color: white;
+}
+
+/* ===== RESULTS STRIP ===== */
+.results-strip {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.result-chip {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.result-chip:hover { transform: scale(1.15); }
+.result-chip.win { background: rgba(34,197,94,0.15); color: var(--accent-green); border: 1px solid rgba(34,197,94,0.3); }
+.result-chip.draw { background: rgba(245,158,11,0.15); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.3); }
+.result-chip.loss { background: rgba(239,68,68,0.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.3); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .portada { padding: 40px 24px; }
+  .section-header { padding: 32px 24px 20px; }
+  .content-area { padding: 0 24px 40px; }
+  .radar-container { grid-template-columns: 1fr; }
+  .portada-stats { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ===== MOBILE TOGGLE ===== */
+.mobile-toggle {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 200;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+@media (max-width: 900px) {
+  .mobile-toggle { display: block; }
+}
+
+/* ===== PLAYER DETAIL MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 300;
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 640px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+.modal-close {
+  float: right;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  margin-bottom: 4px;
+  clear: both;
+}
+
+.modal .dorsal-big {
+  font-size: 14px;
+  color: var(--racing-gold);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.modal-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.modal-stat {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+}
+
+.modal-stat .val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.modal-stat .lbl {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.rating-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.rating-section h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.rating-star {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid var(--border);
+  color: var(--text-muted);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+}
+
+.rating-star:hover, .rating-star.selected {
+  border-color: var(--racing-gold);
+  color: var(--racing-gold);
+  background: rgba(200,168,78,0.1);
+}
+
+.notes-area {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 12px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.notes-area::placeholder { color: var(--text-muted); }
+.notes-area:focus { outline: none; border-color: var(--racing-blue); }
+
+/* Points evolution chart */
+.points-chart {
+  margin-top: 32px;
+}
+
+.points-chart svg {
+  width: 100%;
+}
+</style>
+</head>
+<body>
+
+<div class="wireframe-badge">Wireframe · v0.1</div>
+
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="club-crest">RCP</div>
+    <div class="club-info">
+      <h2>Racing Club<br>Portuense</h2>
+      <span>Temporada 2025/2026</span>
+    </div>
+  </div>
+  
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Informe</div>
+    <div class="nav-item active" data-section="portada">
+      <span class="nav-icon">◈</span> Portada
+    </div>
+    <div class="nav-item" data-section="plantilla">
+      <span class="nav-icon">⬡</span> Plantilla
+      <span class="nav-badge">28</span>
+    </div>
+    <div class="nav-item" data-section="minutos">
+      <span class="nav-icon">▦</span> Gestión de minutos
+    </div>
+    <div class="nav-item" data-section="fichas">
+      <span class="nav-icon">◉</span> Fichas individuales
+    </div>
+    <div class="nav-item" data-section="comparativas">
+      <span class="nav-icon">⟐</span> Comparativas
+    </div>
+    
+    <div class="nav-section-label">Análisis</div>
+    <div class="nav-item" data-section="tactico">
+      <span class="nav-icon">◫</span> Análisis táctico
+    </div>
+    <div class="nav-item" data-section="equipo">
+      <span class="nav-icon">◰</span> Análisis de equipo
+    </div>
+    <div class="nav-item" data-section="goles">
+      <span class="nav-icon">⚽</span> Goles de temporada
+      <span class="nav-badge">50</span>
+    </div>
+    
+    <div class="nav-section-label">Mercado</div>
+    <div class="nav-item" data-section="mercado">
+      <span class="nav-icon">◎</span> Búsqueda de jugadores
+    </div>
+  </div>
+  
+  <div class="sidebar-footer">
+    Dirección Deportiva · <span>USO INTERNO</span>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- PORTADA -->
+  <div class="page-section active" id="portada">
+    <div class="portada">
+      <div class="portada-tag">Dirección Deportiva · Uso Interno</div>
+      <h1>INFORME DE<br><span class="gold">TEMPORADA</span></h1>
+      <div class="portada-subtitle">División de Honor Senior · Grupo 1 · Andalucía</div>
+      
+      <div class="portada-stats">
+        <div class="portada-stat">
+          <div class="value">28</div>
+          <div class="label">Partidos</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value green">18</div>
+          <div class="label">Victorias</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value amber">7</div>
+          <div class="label">Empates</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value red">3</div>
+          <div class="label">Derrotas</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value">50</div>
+          <div class="label">Goles a favor</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value">17</div>
+          <div class="label">Goles en contra</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value gold">58</div>
+          <div class="label">Puntos</div>
+        </div>
+        <div class="portada-stat">
+          <div class="value">3º</div>
+          <div class="label">Clasificación</div>
+        </div>
+      </div>
+      
+      <div class="results-strip" style="margin-top:32px;">
+        <div class="result-chip win" title="J01 vs Betis C (F) 0-1">V</div>
+        <div class="result-chip draw" title="J02 vs Inter Sevilla (L) 1-1">E</div>
+        <div class="result-chip loss" title="J03 vs Palma del Río (F) 2-1">D</div>
+        <div class="result-chip draw" title="J04 vs La Palma (L) 1-1">E</div>
+        <div class="result-chip loss" title="J05 vs Montilla (F) 1-0">D</div>
+        <div class="result-chip win" title="J06 vs Espeleño (L) 5-1">V</div>
+        <div class="result-chip win" title="J07 vs Moguer (L) 4-2">V</div>
+        <div class="result-chip win" title="J08 vs Rociana (F) 2-4">V</div>
+        <div class="result-chip win" title="J09 vs Lebrijana (L) 1-0">V</div>
+        <div class="result-chip win" title="J10 vs Los Barrios (F) 0-3">V</div>
+        <div class="result-chip win" title="J11 vs U.P. Viso (L) 1-0">V</div>
+        <div class="result-chip win" title="J12 vs Cartaya (F) 0-1">V</div>
+        <div class="result-chip win" title="J13 vs Cabecense (L) 2-0">V</div>
+        <div class="result-chip loss" title="J14 vs Egabrense (F) 2-1">D</div>
+        <div class="result-chip win" title="J15 vs Cádiz C (L) 3-0">V</div>
+        <div class="result-chip draw" title="J16 vs Betis C (L) 0-0">E</div>
+        <div class="result-chip draw" title="J17 vs Inter Sevilla (F) 2-2">E</div>
+        <div class="result-chip draw" title="J18 vs Palma del Río (L) 1-1">E</div>
+        <div class="result-chip win" title="J19 vs La Palma (F) 0-3">V</div>
+        <div class="result-chip draw" title="J20 vs Montilla (L) 0-0">E</div>
+        <div class="result-chip draw" title="J21 vs Espeleño (F) 1-1">E</div>
+        <div class="result-chip win" title="J22 vs Moguer (F) 1-2">V</div>
+        <div class="result-chip win" title="J23 vs Rociana (L) 7-0">V</div>
+        <div class="result-chip win" title="J24 vs Lebrijana (F) 0-1">V</div>
+        <div class="result-chip win" title="J25 vs Los Barrios (L) 1-0">V</div>
+        <div class="result-chip win" title="J26 vs U.P. Viso (F) 0-1">V</div>
+        <div class="result-chip win" title="J27 vs Cartaya (L) 1-0">V</div>
+        <div class="result-chip win" title="J28 vs Cabecense (F) 0-1">V</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANTILLA -->
+  <div class="page-section" id="plantilla">
+    <div class="section-header">
+      <div class="tag">02 · Plantilla</div>
+      <h2>PLANTILLA COMPLETA</h2>
+      <p>Campograma por demarcación y fichas individuales de los 28 jugadores registrados esta temporada.</p>
+    </div>
+    <div class="content-area">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:32px;text-align:center;">
+        <div class="pitch-placeholder" style="max-width:600px;margin:0 auto;aspect-ratio:4/5;">
+          Campograma SVG con jugadores por demarcación<br><small style="opacity:0.5;font-size:11px;">Pendiente: demarcaciones exactas proporcionadas por Carlos</small>
+        </div>
+      </div>
+      
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="todos">Todos</button>
+        <button class="filter-btn" data-filter="porteros">Porteros</button>
+        <button class="filter-btn" data-filter="defensas">Defensas</button>
+        <button class="filter-btn" data-filter="centrocampistas">Centrocampistas</button>
+        <button class="filter-btn" data-filter="delanteros">Delanteros</button>
+        <button class="filter-btn" data-filter="staff">Cuerpo Técnico</button>
+      </div>
+      
+      <div class="player-grid" id="playerGrid"></div>
+    </div>
+  </div>
+
+  <!-- GESTIÓN DE MINUTOS -->
+  <div class="page-section" id="minutos">
+    <div class="section-header">
+      <div class="tag">03 · Gestión de minutos</div>
+      <h2>PARTICIPACIÓN POR JORNADA</h2>
+      <p>Timeline de participación de cada jugador a lo largo de las 28 jornadas disputadas.</p>
+    </div>
+    <div class="content-area">
+      <div style="display:flex;gap:16px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);">
+          <div class="jornada-cell titular" style="width:14px;height:14px;"></div> Titular
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);">
+          <div class="jornada-cell suplente" style="width:14px;height:14px;"></div> Suplente
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);">
+          <div class="jornada-cell no-juega" style="width:14px;height:14px;"></div> No participa
+        </div>
+      </div>
+      <div class="minutes-grid">
+        <table class="minutes-table" id="minutesTable"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHAS INDIVIDUALES -->
+  <div class="page-section" id="fichas">
+    <div class="section-header">
+      <div class="tag">04 · Fichas individuales</div>
+      <h2>FICHA DE JUGADOR</h2>
+      <p>Selecciona un jugador de la plantilla para ver su ficha completa con estadísticas, valoración y notas.</p>
+    </div>
+    <div class="content-area">
+      <select id="playerSelect" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:12px 16px;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;width:100%;max-width:400px;margin-bottom:24px;cursor:pointer;">
+        <option value="">Selecciona un jugador...</option>
+      </select>
+      <div id="playerDetailArea"></div>
+    </div>
+  </div>
+
+  <!-- COMPARATIVAS -->
+  <div class="page-section" id="comparativas">
+    <div class="section-header">
+      <div class="tag">05 · Comparativas</div>
+      <h2>COMPARATIVA DE JUGADORES</h2>
+      <p>Selecciona dos jugadores para comparar sus métricas de rendimiento.</p>
+    </div>
+    <div class="content-area">
+      <div class="compare-selector">
+        <select id="compareA" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:10px 16px;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;min-width:220px;">
+          <option value="">Jugador A...</option>
+        </select>
+        <span class="vs-badge">VS</span>
+        <select id="compareB" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:10px 16px;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;min-width:220px;">
+          <option value="">Jugador B...</option>
+        </select>
+      </div>
+      <div class="radar-container">
+        <div class="radar-placeholder">
+          <div style="text-align:center;color:var(--text-muted);font-size:13px;">
+            <div style="font-size:32px;margin-bottom:8px;opacity:0.3;">⟐</div>
+            Radar Chart interactivo<br><small>Partidos · Titularidades · Goles · Tarjetas · Minutos</small>
+          </div>
+        </div>
+        <div class="radar-placeholder">
+          <div style="text-align:center;color:var(--text-muted);font-size:13px;">
+            <div style="font-size:32px;margin-bottom:8px;opacity:0.3;">▥</div>
+            Barras comparativas<br><small>Ranking y métricas lado a lado</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS TÁCTICO -->
+  <div class="page-section" id="tactico">
+    <div class="section-header">
+      <div class="tag">06 · Análisis táctico</div>
+      <h2>MODELO DE JUEGO</h2>
+      <p>Formaciones utilizadas por bloques de jornadas y evolución táctica a lo largo de la temporada.</p>
+    </div>
+    <div class="content-area">
+      <div class="formation-block">
+        <h3>PENDIENTE DE CONTENIDO</h3>
+        <div class="period">Carlos proporcionará: formaciones por bloques, narrativa táctica por fases (ofensiva, defensiva, transiciones)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div>
+            <div class="pitch-placeholder">
+              Fase ofensiva<br>Campograma SVG
+            </div>
+          </div>
+          <div>
+            <div class="pitch-placeholder">
+              Fase defensiva<br>Campograma SVG
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS DE EQUIPO -->
+  <div class="page-section" id="equipo">
+    <div class="section-header">
+      <div class="tag">07 · Análisis de equipo</div>
+      <h2>RADIOGRAFÍA ESTADÍSTICA</h2>
+      <p>Datos agregados del equipo: rendimiento, goles, tarjetas y patrones relevantes.</p>
+    </div>
+    <div class="content-area">
+      <div class="stat-cards">
+        <div class="stat-card-lg">
+          <div class="title">Media goleadora</div>
+          <div class="big-value" style="color:var(--accent-green);">1.79</div>
+          <div class="sub">goles por partido</div>
+        </div>
+        <div class="stat-card-lg">
+          <div class="title">Media encajada</div>
+          <div class="big-value" style="color:var(--accent-red);">0.61</div>
+          <div class="sub">goles en contra por partido</div>
+        </div>
+        <div class="stat-card-lg">
+          <div class="title">Porterías a cero</div>
+          <div class="big-value" style="color:var(--racing-gold);">14</div>
+          <div class="sub">de 28 partidos (50%)</div>
+        </div>
+        <div class="stat-card-lg">
+          <div class="title">Goleadores distintos</div>
+          <div class="big-value">20</div>
+          <div class="sub">jugadores han marcado</div>
+        </div>
+        <div class="stat-card-lg">
+          <div class="title">Rendimiento local</div>
+          <div class="big-value" style="color:var(--accent-green);">71%</div>
+          <div class="sub">% de puntos en casa</div>
+        </div>
+        <div class="stat-card-lg">
+          <div class="title">Rendimiento visitante</div>
+          <div class="big-value" style="color:var(--racing-blue-light);">79%</div>
+          <div class="sub">% de puntos fuera</div>
+        </div>
+      </div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;">
+        <div class="chart-placeholder" id="goalsIntervalChart">
+          <div class="chart-title">Goles por intervalo de tiempo</div>
+          <div class="chart-area" id="goalsChartArea"></div>
+        </div>
+        <div class="chart-placeholder">
+          <div class="chart-title">Evolución de puntos</div>
+          <div class="chart-area" style="align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;">
+            Gráfico de línea con acumulado de puntos J1→J28
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOLES DE LA TEMPORADA -->
+  <div class="page-section" id="goles">
+    <div class="section-header">
+      <div class="tag">08 · Goles de la temporada</div>
+      <h2>CATÁLOGO DE GOLES</h2>
+      <p>Los 50 goles del Racing esta temporada. Los enlaces a vídeo se añadirán por jornada.</p>
+    </div>
+    <div class="content-area">
+      <div class="goals-timeline" id="goalsTimeline"></div>
+    </div>
+  </div>
+
+  <!-- MERCADO -->
+  <div class="page-section" id="mercado">
+    <div class="section-header">
+      <div class="tag">09 · Mercado</div>
+      <h2>BÚSQUEDA DE JUGADORES</h2>
+      <p>Módulo de scouting para identificar objetivos de mercado en 3ª y 2ª RFEF.</p>
+    </div>
+    <div class="content-area">
+      <div class="coming-soon">
+        <div class="icon">◎</div>
+        <h3>PRÓXIMAMENTE</h3>
+        <p>Pendiente de definir fuente de datos de 3ª y 2ª RFEF.<br>Los informes individuales de jugadores se integrarán aquí.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PLAYER DETAIL MODAL -->
+<div class="modal-overlay" id="playerModal">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// Player data from Excel extraction
+const players = [
+  {d:1,n:"López García, Manuel",t:9,s:19,g:0,a:0,r:0,jt:[1,6,7,9,11,13,15,23,25],js:[2,3,4,5,8,10,12,14,16,17,18,19,20,21,22,24,26,27,28],staff:false},
+  {d:2,n:"Humanes Porras, Carmelo Manuel",t:14,s:3,g:0,a:2,r:0,jt:[],js:[],staff:false},
+  {d:3,n:"Bonilla Díaz, David",t:7,s:2,g:1,a:1,r:0,jt:[],js:[],staff:false},
+  {d:4,n:"Gil Navarro, Kevin Roberto",t:9,s:8,g:1,a:2,r:1,jt:[],js:[],staff:false},
+  {d:5,n:"Ramos Delgado, Fernando",t:2,s:8,g:0,a:4,r:1,jt:[],js:[],staff:false},
+  {d:6,n:"Durán López, Alberto",t:18,s:4,g:0,a:6,r:0,jt:[],js:[],staff:false},
+  {d:7,n:"Heredia Montoya, Manuel",t:15,s:6,g:1,a:3,r:0,jt:[],js:[],staff:false},
+  {d:8,n:"Bonilla Durán, Juan Kevin",t:6,s:10,g:0,a:3,r:0,jt:[],js:[],staff:false},
+  {d:8,n:"Jiménez Cruz, Francisco José",t:9,s:10,g:6,a:5,r:0,jt:[],js:[],staff:false},
+  {d:9,n:"Tamayo Pacheco, Francisco Javier",t:22,s:3,g:15,a:5,r:0,jt:[],js:[],staff:false},
+  {d:10,n:"Garrido Fernández, Antonio Jesús",t:2,s:5,g:1,a:1,r:0,jt:[],js:[],staff:false},
+  {d:11,n:"Domínguez Moreno, Manuel",t:10,s:14,g:1,a:3,r:1,jt:[],js:[],staff:false},
+  {d:13,n:"Lozano Álvarez, Juan Manuel",t:19,s:8,g:0,a:0,r:1,jt:[],js:[],staff:false},
+  {d:14,n:"Romero Rodríguez, Adrián",t:17,s:6,g:2,a:6,r:0,jt:[],js:[],staff:false},
+  {d:15,n:"Rodríguez Muñoz, José Luis",t:24,s:3,g:1,a:5,r:0,jt:[],js:[],staff:false},
+  {d:16,n:"Jiménez Macías, Borja",t:8,s:14,g:2,a:1,r:0,jt:[],js:[],staff:false},
+  {d:18,n:"Oca Contreras, Antonio Miguel",t:19,s:2,g:3,a:2,r:0,jt:[],js:[],staff:false},
+  {d:19,n:"Tocino Sánchez, Antonio Jesús",t:1,s:12,g:0,a:0,r:0,jt:[],js:[],staff:false},
+  {d:20,n:"Barba Castillo, Roberto",t:17,s:10,g:0,a:5,r:0,jt:[],js:[],staff:false},
+  {d:21,n:"García Pavón, Francisco José",t:7,s:4,g:0,a:2,r:0,jt:[],js:[],staff:false},
+  {d:22,n:"Ruiz Herrera Sánchez, Cristian",t:2,s:9,g:1,a:0,r:0,jt:[],js:[],staff:false},
+  {d:24,n:"Cornejo Salas, Jacobo",t:17,s:1,g:1,a:6,r:1,jt:[],js:[],staff:false},
+  {d:25,n:"Castañeda Sánchez, Alejandro",t:0,s:1,g:0,a:0,r:0,jt:[],js:[],staff:false},
+  {d:26,n:"Palacio, Elías Sebastián",t:1,s:3,g:1,a:0,r:0,jt:[],js:[],staff:false},
+  {d:27,n:"Sainz Hughes, José Luis",t:2,s:17,g:2,a:1,r:0,jt:[],js:[],staff:false},
+  {d:28,n:"Cuevas Algeciras, Adrián",t:17,s:3,g:2,a:2,r:0,jt:[],js:[],staff:false},
+  {d:30,n:"Rodríguez Romero, Hugo",t:21,s:4,g:6,a:6,r:0,jt:[],js:[],staff:false},
+  {d:42,n:"Laínez Herrera, Daniel",t:13,s:7,g:1,a:5,r:0,jt:[],js:[],staff:false},
+];
+
+// Goals data
+const goals = [
+  {j:1,m:23,p:"Tamayo Pacheco, Francisco Javier"},
+  {j:6,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:6,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:6,m:'—',p:"Rodríguez Romero, Hugo"},{j:6,m:'—',p:"Oca Contreras, Antonio Miguel"},{j:6,m:'—',p:"Jiménez Cruz, Francisco José"},
+  {j:7,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:7,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:7,m:'—',p:"Rodríguez Romero, Hugo"},{j:7,m:'—',p:"Jiménez Cruz, Francisco José"},
+  {j:8,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:8,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:8,m:'—',p:"Cuevas Algeciras, Adrián"},{j:8,m:'—',p:"Sainz Hughes, José Luis"},
+  {j:9,m:'—',p:"Romero Rodríguez, Adrián"},
+  {j:10,m:'—',p:"Rodríguez Romero, Hugo"},{j:10,m:'—',p:"Jiménez Cruz, Francisco José"},{j:10,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:11,m:'—',p:"Jiménez Macías, Borja"},
+  {j:12,m:'—',p:"Oca Contreras, Antonio Miguel"},
+  {j:13,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:13,m:'—',p:"Jiménez Cruz, Francisco José"},
+  {j:15,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:15,m:'—',p:"Cornejo Salas, Jacobo"},{j:15,m:'—',p:"Domínguez Moreno, Manuel"},
+  {j:19,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:19,m:'—',p:"Rodríguez Romero, Hugo"},{j:19,m:'—',p:"Heredia Montoya, Manuel"},
+  {j:22,m:'—',p:"Jiménez Cruz, Francisco José"},{j:22,m:'—',p:"Bonilla Díaz, David"},
+  {j:23,m:'—',p:"Tamayo Pacheco, Francisco Javier"},{j:23,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:23,m:'—',p:"Rodríguez Romero, Hugo"},{j:23,m:'—',p:"Jiménez Cruz, Francisco José"},
+  {j:23,m:'—',p:"Romero Rodríguez, Adrián"},{j:23,m:'—',p:"Cuevas Algeciras, Adrián"},{j:23,m:'—',p:"Sainz Hughes, José Luis"},
+  {j:24,m:'—',p:"Gil Navarro, Kevin Roberto"},
+  {j:25,m:'—',p:"Oca Contreras, Antonio Miguel"},
+  {j:26,m:'—',p:"Jiménez Macías, Borja"},
+  {j:27,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:28,m:'—',p:"Rodríguez Romero, Hugo"},
+  // Additional goals from other jornadas
+  {j:2,m:'—',p:"Ruiz Herrera Sánchez, Cristian"},
+  {j:3,m:'—',p:"Garrido Fernández, Antonio Jesús"},
+  {j:4,m:'—',p:"Rodríguez Muñoz, José Luis"},
+  {j:14,m:'—',p:"Laínez Herrera, Daniel"},
+  {j:17,m:'—',p:"Palacio, Elías Sebastián"},{j:17,m:'—',p:"Tamayo Pacheco, Francisco Javier"},
+  {j:18,m:'—',p:"García Castro, Mario"},
+  {j:21,m:'—',p:"Borrero González, Alejandro"},
+];
+
+goals.sort((a,b) => a.j - b.j);
+
+// Navigation
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(item.dataset.section).classList.add('active');
+    document.querySelector('.main').scrollTop = 0;
+    // Close sidebar on mobile
+    document.querySelector('.sidebar').classList.remove('open');
+  });
+});
+
+// Build player grid
+const grid = document.getElementById('playerGrid');
+players.forEach(p => {
+  const initials = p.n.split(',')[0].substring(0,2).toUpperCase();
+  const pj = p.t + p.s;
+  grid.innerHTML += `
+    <div class="player-card ${p.staff ? 'staff-card' : ''}" onclick="showPlayer(${players.indexOf(p)})">
+      <div class="dorsal">${p.d}</div>
+      <div class="photo-placeholder">${initials}</div>
+      <div class="name">${p.n.split(',')[0]}</div>
+      <div class="dorsal-label">Dorsal ${p.d}</div>
+      <div class="stats-row">
+        <div class="mini-stat"><div class="val">${pj}</div><div class="lbl">PJ</div></div>
+        <div class="mini-stat"><div class="val">${p.t}</div><div class="lbl">Tit</div></div>
+        <div class="mini-stat"><div class="val">${p.g}</div><div class="lbl">Gol</div></div>
+        <div class="mini-stat"><div class="val">${p.a}</div><div class="lbl">TA</div></div>
+        ${p.r > 0 ? `<div class="mini-stat"><div class="val" style="color:var(--accent-red)">${p.r}</div><div class="lbl">TR</div></div>` : ''}
+      </div>
+    </div>
+  `;
+});
+
+// Build minutes timeline
+const table = document.getElementById('minutesTable');
+let headerRow = '<tr><th style="text-align:left;min-width:180px;">Jugador</th>';
+for (let j = 1; j <= 28; j++) headerRow += `<th>${j}</th>`;
+headerRow += '<th>PJ</th><th>T</th></tr>';
+table.innerHTML = headerRow;
+
+// Sort players by total appearances desc
+const sortedForMinutes = [...players].sort((a,b) => (b.t+b.s) - (a.t+a.s));
+sortedForMinutes.forEach(p => {
+  let row = `<tr><td class="player-name-cell">${p.d} · ${p.n.split(',')[0]}</td>`;
+  for (let j = 1; j <= 28; j++) {
+    // Simplified - we'd need full jornada data for exact status
+    const pj = p.t + p.s;
+    const probTitular = p.t / Math.max(pj, 1);
+    // Random approximation for wireframe
+    const hash = (p.d * 31 + j * 17) % 100;
+    let cls = 'no-juega';
+    if (hash < (probTitular * 100 * pj / 28)) cls = 'titular';
+    else if (hash < (pj / 28 * 100)) cls = 'suplente';
+    row += `<td><div class="jornada-cell ${cls}" title="J${j}"></div></td>`;
+  }
+  row += `<td style="font-weight:700;font-size:11px;">${p.t+p.s}</td>`;
+  row += `<td style="font-size:11px;color:var(--text-muted);">${p.t}</td></tr>`;
+  table.innerHTML += row;
+});
+
+// Build goals timeline
+const goalsDiv = document.getElementById('goalsTimeline');
+goals.forEach(g => {
+  goalsDiv.innerHTML += `
+    <div class="goal-entry">
+      <div class="goal-jornada">J${g.j}</div>
+      <div class="goal-minute">${g.m}'</div>
+      <div class="goal-scorer">${g.p}</div>
+      <div class="goal-video-btn">▶ VÍDEO</div>
+    </div>
+  `;
+});
+
+// Populate selects
+const selects = ['playerSelect', 'compareA', 'compareB'];
+selects.forEach(id => {
+  const sel = document.getElementById(id);
+  if (sel) {
+    players.forEach((p, i) => {
+      sel.innerHTML += `<option value="${i}">${p.d} · ${p.n}</option>`;
+    });
+  }
+});
+
+// Player detail modal
+function showPlayer(idx) {
+  const p = players[idx];
+  const pj = p.t + p.s;
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <button class="modal-close" onclick="document.getElementById('playerModal').classList.remove('active')">✕</button>
+    <h3>${p.n}</h3>
+    <div class="dorsal-big">Dorsal ${p.d}${p.staff ? ' · Cuerpo Técnico' : ''}</div>
+    
+    <div class="modal-stats">
+      <div class="modal-stat"><div class="val">${pj}</div><div class="lbl">Partidos</div></div>
+      <div class="modal-stat"><div class="val">${p.t}</div><div class="lbl">Titular</div></div>
+      <div class="modal-stat"><div class="val" style="color:var(--accent-green)">${p.g}</div><div class="lbl">Goles</div></div>
+      <div class="modal-stat"><div class="val" style="color:var(--accent-amber)">${p.a}/${p.r}</div><div class="lbl">TA / TR</div></div>
+    </div>
+    
+    <div style="background:var(--bg-card);border-radius:var(--radius-sm);padding:16px;margin-top:16px;">
+      <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Participación %</div>
+      <div style="display:flex;gap:4px;height:24px;border-radius:4px;overflow:hidden;">
+        <div style="width:${(p.t/28*100).toFixed(1)}%;background:var(--racing-blue);" title="${p.t} titularidades"></div>
+        <div style="width:${(p.s/28*100).toFixed(1)}%;background:rgba(0,61,122,0.35);" title="${p.s} suplencias"></div>
+        <div style="flex:1;background:var(--border);" title="${28-pj} no participa"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text-muted);">
+        <span>Titular ${(p.t/28*100).toFixed(0)}%</span>
+        <span>Suplente ${(p.s/28*100).toFixed(0)}%</span>
+        <span>No juega ${((28-pj)/28*100).toFixed(0)}%</span>
+      </div>
+    </div>
+    
+    <div class="rating-section">
+      <h4>Valoración de temporada</h4>
+      <div class="rating-stars">
+        ${[1,2,3,4,5,6,7,8,9,10].map(i => `<div class="rating-star" onclick="this.parentElement.querySelectorAll('.rating-star').forEach((s,idx)=>{idx<${i}?s.classList.add('selected'):s.classList.remove('selected')})">${i}</div>`).join('')}
+      </div>
+      <textarea class="notes-area" placeholder="Notas del cuerpo técnico sobre la temporada del jugador..."></textarea>
+    </div>
+  `;
+  document.getElementById('playerModal').classList.add('active');
+}
+
+// Close modal on overlay click
+document.getElementById('playerModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('playerModal')) {
+    document.getElementById('playerModal').classList.remove('active');
+  }
+});
+
+// Player select change
+document.getElementById('playerSelect').addEventListener('change', (e) => {
+  if (e.target.value !== '') showPlayer(parseInt(e.target.value));
+});
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Filter logic would be applied here based on position data from Carlos
+  });
+});
+</script>
+</body>
+</html>
