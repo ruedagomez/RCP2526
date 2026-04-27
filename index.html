@@ -227,6 +227,115 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
   .player-grid { grid-template-columns:repeat(2,1fr); }
   .portada h1 { font-size:clamp(44px,12vw,60px); }
 }
+
+/* ── FINAL DE TEMPORADA ── */
+.ft-tabs { display:flex; gap:4px; padding:0 48px 0; margin-bottom:28px; border-bottom:1px solid var(--border); overflow-x:auto; flex-shrink:0; }
+.ft-tabs::-webkit-scrollbar { height:0; }
+.ft-tab { padding:12px 16px; font-size:12px; font-weight:600; color:var(--text-muted); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.2s; letter-spacing:0.3px; }
+.ft-tab:hover { color:var(--text-primary); }
+.ft-tab.active { color:var(--racing-red); border-bottom-color:var(--racing-red); font-weight:700; }
+.ft-module { display:none; animation:fadeIn 0.3s ease; }
+.ft-module.active { display:block; }
+
+/* KPI hero row */
+.ft-kpi-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; margin-bottom:28px; }
+.ft-kpi { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 16px; position:relative; overflow:hidden; transition:border-color 0.2s; }
+.ft-kpi:hover { border-color:rgba(200,16,46,0.4); }
+.ft-kpi::after { content:''; position:absolute; top:0; right:0; width:3px; height:100%; background:var(--racing-red); opacity:0; transition:opacity 0.2s; border-radius:0 var(--radius) var(--radius) 0; }
+.ft-kpi:hover::after { opacity:1; }
+.ft-kpi .kpi-val { font-family:'Bebas Neue',sans-serif; font-size:40px; line-height:1; margin-bottom:2px; }
+.ft-kpi .kpi-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); }
+.ft-kpi .kpi-sub { font-size:11px; color:var(--text-secondary); margin-top:3px; }
+.ft-kpi.green .kpi-val { color:var(--accent-green); }
+.ft-kpi.red .kpi-val { color:var(--accent-red); }
+.ft-kpi.amber .kpi-val { color:var(--accent-amber); }
+.ft-kpi.gold .kpi-val { color:var(--racing-red); }
+
+/* skeleton shimmer */
+@keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
+.skel { background:linear-gradient(90deg,var(--bg-card) 25%,var(--bg-card-hover) 50%,var(--bg-card) 75%); background-size:600px 100%; animation:shimmer 1.6s infinite; border-radius:6px; }
+
+/* chart placeholder */
+.ft-chart-wrap { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:20px; }
+.ft-chart-wrap .chart-title { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:16px; }
+.ft-chart-svg { width:100%; display:block; }
+.ft-chart-empty { height:180px; display:flex; align-items:center; justify-content:center; gap:10px; flex-direction:column; }
+.ft-chart-empty .icon { font-size:28px; opacity:0.2; }
+.ft-chart-empty span { font-size:12px; color:var(--text-muted); }
+
+/* two-col layout */
+.ft-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.ft-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:20px; }
+@media(max-width:900px) { .ft-grid-2,.ft-grid-3 { grid-template-columns:1fr; } .ft-tabs { padding:0 16px; } }
+
+/* ranking list */
+.ft-rank { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.ft-rank-header { padding:14px 16px; border-bottom:1px solid var(--border); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); }
+.ft-rank-row { display:flex; align-items:center; gap:12px; padding:11px 16px; border-bottom:1px solid rgba(36,36,36,0.5); transition:background 0.15s; }
+.ft-rank-row:last-child { border-bottom:none; }
+.ft-rank-row:hover { background:rgba(255,255,255,0.02); }
+.ft-rank-pos { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text-muted); min-width:24px; text-align:center; }
+.ft-rank-pos.gold { color:#F59E0B; }
+.ft-rank-pos.silver { color:#9CA3AF; }
+.ft-rank-pos.bronze { color:#B45309; }
+.ft-rank-name { flex:1; font-size:13px; font-weight:600; }
+.ft-rank-sub { font-size:10px; color:var(--text-muted); font-weight:500; }
+.ft-rank-val { font-family:'Bebas Neue',sans-serif; font-size:22px; }
+.ft-rank-val.green { color:var(--accent-green); }
+.ft-rank-val.amber { color:var(--accent-amber); }
+.ft-rank-val.red { color:var(--accent-red); }
+
+/* rival cards */
+.ft-rival-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.ft-rival-card .rival-name { font-family:'Bebas Neue',sans-serif; font-size:24px; margin-bottom:2px; }
+.ft-rival-card .rival-pos { font-size:11px; color:var(--text-muted); font-weight:600; margin-bottom:14px; }
+.ft-rival-h2h { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; text-align:center; margin-bottom:14px; background:rgba(255,255,255,0.03); border-radius:var(--radius-sm); padding:12px; }
+.ft-rival-h2h .score { font-family:'Bebas Neue',sans-serif; font-size:32px; line-height:1; }
+.ft-rival-h2h .score.win { color:var(--accent-green); }
+.ft-rival-h2h .score.draw { color:var(--accent-amber); }
+.ft-rival-h2h .score.loss { color:var(--accent-red); }
+.ft-rival-h2h .h2h-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:1px; }
+.ft-rival-h2h .h2h-vs { font-size:11px; color:var(--text-muted); font-weight:700; }
+.ft-rival-stats { display:flex; gap:10px; flex-wrap:wrap; }
+.ft-rival-stat { flex:1; min-width:60px; background:var(--bg-dark); border-radius:var(--radius-sm); padding:8px; text-align:center; }
+.ft-rival-stat .rv { font-family:'Bebas Neue',sans-serif; font-size:20px; }
+.ft-rival-stat .rl { font-size:8px; color:var(--text-muted); text-transform:uppercase; font-weight:700; }
+
+/* hitos timeline */
+.ft-timeline { position:relative; padding-left:28px; }
+.ft-timeline::before { content:''; position:absolute; left:9px; top:0; bottom:0; width:2px; background:linear-gradient(180deg,var(--racing-red) 0%,rgba(200,16,46,0.1) 100%); }
+.ft-hito { position:relative; margin-bottom:20px; }
+.ft-hito::before { content:''; position:absolute; left:-23px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--racing-red); border:2px solid var(--bg-dark); box-shadow:0 0 0 2px var(--racing-red); }
+.ft-hito .hito-j { font-size:10px; color:var(--racing-red); font-weight:700; letter-spacing:1px; margin-bottom:2px; }
+.ft-hito .hito-text { font-size:13px; font-weight:600; line-height:1.4; }
+.ft-hito .hito-sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.ft-hito.pending::before { background:var(--border); box-shadow:0 0 0 2px var(--border); }
+.ft-hito.pending .hito-j { color:var(--text-muted); }
+.ft-hito.pending .hito-text { color:var(--text-muted); }
+
+/* árbitros tabla */
+.ft-arb-table { width:100%; border-collapse:collapse; font-size:12px; }
+.ft-arb-table th { padding:10px 12px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); border-bottom:1px solid var(--border); background:var(--bg-dark); }
+.ft-arb-table th:not(:first-child) { text-align:center; }
+.ft-arb-table td { padding:10px 12px; border-bottom:1px solid rgba(36,36,36,0.5); }
+.ft-arb-table td:not(:first-child) { text-align:center; }
+.ft-arb-table tr:last-child td { border-bottom:none; }
+.ft-arb-table tr:hover td { background:rgba(255,255,255,0.02); }
+.ft-arb-pill { display:inline-block; font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; }
+.ft-arb-pill.v { background:rgba(34,197,94,0.15); color:var(--accent-green); border:1px solid rgba(34,197,94,0.25); }
+.ft-arb-pill.d { background:rgba(239,68,68,0.15); color:var(--accent-red); border:1px solid rgba(239,68,68,0.25); }
+.ft-arb-pill.e { background:rgba(245,158,11,0.15); color:var(--accent-amber); border:1px solid rgba(245,158,11,0.25); }
+
+/* historico comparativa */
+.ft-hist-bar-wrap { margin-bottom:12px; }
+.ft-hist-bar-label { display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); font-weight:600; margin-bottom:5px; }
+.ft-hist-bar-track { height:10px; background:var(--border); border-radius:5px; overflow:hidden; position:relative; }
+.ft-hist-bar-fill { height:100%; border-radius:5px; transition:width 0.8s ease; }
+.ft-hist-bar-fill.this { background:linear-gradient(90deg,var(--racing-red-dark),var(--racing-red)); }
+.ft-hist-bar-fill.prev { background:rgba(200,16,46,0.3); }
+
+/* nota pendiente */
+.ft-pending-note { display:inline-flex; align-items:center; gap:6px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--accent-amber); background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); padding:5px 12px; border-radius:20px; margin-bottom:16px; }
 </style>
 </head>
 <body>
@@ -252,6 +361,8 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
     <div class="nav-item" data-section="goles"><span class="nav-icon">⚽</span> Goles de temporada <span class="nav-badge">50</span></div>
     <div class="nav-section-label">Mercado</div>
     <div class="nav-item" data-section="mercado"><span class="nav-icon">◎</span> Búsqueda de jugadores</div>
+    <div class="nav-section-label">Final de Temporada</div>
+    <div class="nav-item" data-section="final"><span class="nav-icon">◆</span> Informe final 25/26 <span class="nav-badge" style="background:var(--accent-amber);color:#000">NEW</span></div>
   </div>
   <div class="sidebar-footer">Dirección Deportiva · <span>USO INTERNO</span></div>
 </nav>
@@ -446,6 +557,445 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
       <div class="coming-soon"><div class="icon">◎</div><h3>PRÓXIMAMENTE</h3><p>Pendiente de definir fuente de datos.</p></div>
     </div>
   </div>
+
+  <!-- FINAL DE TEMPORADA -->
+  <div class="page-section" id="final">
+    <div class="section-header">
+      <div class="tag">10 · Informe Final</div>
+      <h2>TEMPORADA 2025 / 2026</h2>
+      <p>Resumen ejecutivo · División de Honor Senior Grupo 1 · Dirección Deportiva</p>
+    </div>
+
+    <!-- TABS INTERNOS -->
+    <div class="ft-tabs">
+      <div class="ft-tab active" data-ft="rendimiento">① Rendimiento en Liga</div>
+      <div class="ft-tab" data-ft="plantilla-ft">② Plantilla</div>
+      <div class="ft-tab" data-ft="rivales">③ Rivales clave</div>
+      <div class="ft-tab" data-ft="disciplina">④ Disciplina</div>
+      <div class="ft-tab" data-ft="arbitros">⑤ Árbitros</div>
+      <div class="ft-tab" data-ft="valoracion">⑥ Valoración</div>
+    </div>
+
+    <!-- ① RENDIMIENTO EN LIGA -->
+    <div class="ft-module active content-area" id="ft-rendimiento">
+
+      <div class="ft-kpi-row">
+        <div class="ft-kpi gold"><div class="kpi-val">—</div><div class="kpi-lbl">Puntos</div><div class="kpi-sub">— de 90 posibles</div></div>
+        <div class="ft-kpi"><div class="kpi-val">—</div><div class="kpi-lbl">Posición final</div><div class="kpi-sub">Grupo 1 Andalucía</div></div>
+        <div class="ft-kpi green"><div class="kpi-val">—</div><div class="kpi-lbl">Victorias</div><div class="kpi-sub">— en casa · — fuera</div></div>
+        <div class="ft-kpi amber"><div class="kpi-val">—</div><div class="kpi-lbl">Empates</div><div class="kpi-sub">— en casa · — fuera</div></div>
+        <div class="ft-kpi red"><div class="kpi-val">—</div><div class="kpi-lbl">Derrotas</div><div class="kpi-sub">— en casa · — fuera</div></div>
+        <div class="ft-kpi green"><div class="kpi-val">—</div><div class="kpi-lbl">Goles a favor</div><div class="kpi-sub">— por partido</div></div>
+        <div class="ft-kpi red"><div class="kpi-val">—</div><div class="kpi-lbl">Goles en contra</div><div class="kpi-sub">— por partido</div></div>
+        <div class="ft-kpi"><div class="kpi-val">—</div><div class="kpi-lbl">Diferencia</div><div class="kpi-sub">balance goles</div></div>
+      </div>
+
+      <!-- Evolución de puntos -->
+      <div class="ft-chart-wrap">
+        <div class="chart-title">📈 Evolución acumulada de puntos — Racing vs Líder (J1–J30)</div>
+        <div class="ft-chart-empty">
+          <div class="icon">📈</div>
+          <span>Pendiente de verificación de datos (J1–J30)</span>
+          <div style="width:100%;max-width:500px;margin-top:12px;">
+            <div class="skel" style="height:140px;border-radius:8px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Racha local vs visitante + goles por período -->
+      <div class="ft-grid-2">
+        <div class="ft-chart-wrap" style="margin-bottom:0">
+          <div class="chart-title">🏠 Local vs 🚌 Visitante</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+            <div style="background:var(--bg-dark);border-radius:var(--radius-sm);padding:14px;text-align:center;">
+              <div style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Local</div>
+              <div class="skel" style="height:60px;border-radius:6px;margin-bottom:8px;"></div>
+              <div style="display:flex;justify-content:center;gap:8px;font-size:11px;color:var(--text-muted);">
+                <span style="color:var(--accent-green)">V —</span>
+                <span style="color:var(--accent-amber)">E —</span>
+                <span style="color:var(--accent-red)">D —</span>
+              </div>
+            </div>
+            <div style="background:var(--bg-dark);border-radius:var(--radius-sm);padding:14px;text-align:center;">
+              <div style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Visitante</div>
+              <div class="skel" style="height:60px;border-radius:6px;margin-bottom:8px;"></div>
+              <div style="display:flex;justify-content:center;gap:8px;font-size:11px;color:var(--text-muted);">
+                <span style="color:var(--accent-green)">V —</span>
+                <span style="color:var(--accent-amber)">E —</span>
+                <span style="color:var(--accent-red)">D —</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ft-chart-wrap" style="margin-bottom:0">
+          <div class="chart-title">⏱ Goles por período (minuto)</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+            ${['1–15','16–30','31–45','46–60','61–75','76–90+'].map(p=>`
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:3px;"><span>${p}'</span><span>—</span></div>
+              <div class="skel" style="height:8px;border-radius:4px;width:${Math.round(30+Math.random()*55)}%;"></div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Histórico comparativo -->
+      <div class="ft-chart-wrap">
+        <div class="chart-title">📊 Comparativa histórica de puntos</div>
+        <div class="ft-pending-note">⚠ Pendiente · Introducir datos de temporadas anteriores</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          ${['2024/25','2023/24','2022/23','2021/22'].map(t=>`
+          <div class="ft-hist-bar-wrap">
+            <div class="ft-hist-bar-label"><span>${t}</span><span style="color:var(--text-muted)">— pts</span></div>
+            <div class="ft-hist-bar-track"><div class="ft-hist-bar-fill prev skel" style="width:60%;background:rgba(200,16,46,0.2);"></div></div>
+          </div>`).join('')}
+          <div class="ft-hist-bar-wrap">
+            <div class="ft-hist-bar-label"><span style="color:var(--racing-red);font-weight:700">2025/26 ← esta temporada</span><span style="color:var(--racing-red);font-weight:700">— pts</span></div>
+            <div class="ft-hist-bar-track"><div class="ft-hist-bar-fill this" style="width:75%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ft-rendimiento -->
+
+    <!-- ② PLANTILLA RESUMEN -->
+    <div class="ft-module content-area" id="ft-plantilla-ft">
+
+      <div class="ft-grid-3">
+        <!-- Top goleadores -->
+        <div class="ft-rank">
+          <div class="ft-rank-header">⚽ Goleadores</div>
+          ${[['gold','1'],['silver','2'],['bronze','3'],['','4'],['','5']].map(([cls,n])=>`
+          <div class="ft-rank-row">
+            <div class="ft-rank-pos ${cls}">${n}</div>
+            <div><div class="skel" style="height:13px;width:120px;border-radius:3px;margin-bottom:4px;"></div><div class="skel" style="height:9px;width:70px;border-radius:3px;"></div></div>
+            <div class="ft-rank-val green" style="margin-left:auto;">—</div>
+          </div>`).join('')}
+        </div>
+        <!-- Más minutos -->
+        <div class="ft-rank">
+          <div class="ft-rank-header">⏱ Más minutos</div>
+          ${[['gold','1'],['silver','2'],['bronze','3'],['','4'],['','5']].map(([cls,n])=>`
+          <div class="ft-rank-row">
+            <div class="ft-rank-pos ${cls}">${n}</div>
+            <div><div class="skel" style="height:13px;width:120px;border-radius:3px;margin-bottom:4px;"></div><div class="skel" style="height:9px;width:70px;border-radius:3px;"></div></div>
+            <div class="ft-rank-val" style="margin-left:auto;font-size:16px;color:var(--text-secondary);">—'</div>
+          </div>`).join('')}
+        </div>
+        <!-- Más tarjetas -->
+        <div class="ft-rank">
+          <div class="ft-rank-header">🟨 Más amonestados</div>
+          ${[['gold','1'],['silver','2'],['bronze','3'],['','4'],['','5']].map(([cls,n])=>`
+          <div class="ft-rank-row">
+            <div class="ft-rank-pos ${cls}">${n}</div>
+            <div><div class="skel" style="height:13px;width:120px;border-radius:3px;margin-bottom:4px;"></div><div class="skel" style="height:9px;width:70px;border-radius:3px;"></div></div>
+            <div class="ft-rank-val amber" style="margin-left:auto;">—</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Participación resumen -->
+      <div class="ft-chart-wrap">
+        <div class="chart-title">👥 Participación de plantilla — Jugadores con ≥1 minuto</div>
+        <div class="ft-pending-note">⚠ Pendiente · Verificación completa J1–J30</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:4px;">
+          ${Array(6).fill(0).map((_,i)=>`
+          <div style="background:var(--bg-dark);border-radius:var(--radius-sm);padding:12px;display:flex;align-items:center;gap:10px;">
+            <div class="skel" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div class="skel" style="height:11px;width:100px;border-radius:3px;margin-bottom:5px;"></div>
+              <div class="skel" style="height:8px;width:60px;border-radius:3px;"></div>
+            </div>
+            <div class="skel" style="width:28px;height:28px;border-radius:4px;"></div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+    </div><!-- /ft-plantilla-ft -->
+
+    <!-- ③ RIVALES CLAVE -->
+    <div class="ft-module content-area" id="ft-rivales">
+
+      <div class="ft-pending-note">⚠ Pendiente · Verificación datos J1–J30 de rivales</div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:20px;">Los tres equipos que definieron la lucha por el ascenso.</p>
+
+      <div class="ft-grid-3">
+        <!-- Betis C -->
+        <div class="ft-rival-card">
+          <div class="rival-name">Betis C</div>
+          <div class="rival-pos">1º · Campeón de Liga</div>
+          <div class="ft-rival-h2h">
+            <div>
+              <div class="score draw">—</div>
+              <div class="h2h-label">IDA</div>
+            </div>
+            <div class="h2h-vs">Racing vs<br>Betis C</div>
+            <div>
+              <div class="score draw">—</div>
+              <div class="h2h-label">VUELTA</div>
+            </div>
+          </div>
+          <div class="ft-rival-stats">
+            <div class="ft-rival-stat"><div class="rv">—</div><div class="rl">Puntos</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-green)">—</div><div class="rl">GF</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-red)">—</div><div class="rl">GC</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-amber)">—</div><div class="rl">TA</div></div>
+          </div>
+        </div>
+        <!-- Montilla -->
+        <div class="ft-rival-card">
+          <div class="rival-name">Montilla C.F.</div>
+          <div class="rival-pos">—º · Rival directo en ascenso</div>
+          <div class="ft-rival-h2h">
+            <div>
+              <div class="score draw">—</div>
+              <div class="h2h-label">IDA</div>
+            </div>
+            <div class="h2h-vs">Racing vs<br>Montilla</div>
+            <div>
+              <div class="score draw">—</div>
+              <div class="h2h-label">VUELTA</div>
+            </div>
+          </div>
+          <div class="ft-rival-stats">
+            <div class="ft-rival-stat"><div class="rv">—</div><div class="rl">Puntos</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-green)">—</div><div class="rl">GF</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-red)">—</div><div class="rl">GC</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-amber)">—</div><div class="rl">TA</div></div>
+          </div>
+        </div>
+        <!-- Egabrense -->
+        <div class="ft-rival-card">
+          <div class="rival-name">Egabrense C.D.</div>
+          <div class="rival-pos">—º · Rival directo en ascenso</div>
+          <div class="ft-rival-h2h">
+            <div>
+              <div class="score draw">—</div>
+              <div class="h2h-label">IDA</div>
+            </div>
+            <div class="h2h-vs">Racing vs<br>Egabrense</div>
+            <div>
+              <div class="score draw">—</div>
+              <div class="h2h-label">VUELTA</div>
+            </div>
+          </div>
+          <div class="ft-rival-stats">
+            <div class="ft-rival-stat"><div class="rv">—</div><div class="rl">Puntos</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-green)">—</div><div class="rl">GF</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-red)">—</div><div class="rl">GC</div></div>
+            <div class="ft-rival-stat"><div class="rv" style="color:var(--accent-amber)">—</div><div class="rl">TA</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clasificación final top 5 -->
+      <div class="ft-rank">
+        <div class="ft-rank-header">🏆 Clasificación final — Top 5</div>
+        ${[['gold','1','Betis C'],['silver','2','Racing Club Portuense'],['bronze','3','Montilla C.F.'],['','4','Egabrense C.D.'],['','5','Palma del Río']].map(([cls,n,nombre])=>`
+        <div class="ft-rank-row">
+          <div class="ft-rank-pos ${cls}">${n}</div>
+          <div class="ft-rank-name">${nombre}${n==='2'?'<span style="font-size:9px;color:var(--racing-red);font-weight:700;margin-left:8px;background:rgba(200,16,46,0.1);padding:2px 6px;border-radius:3px;">NOSOTROS</span>':''}</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="text-align:center;min-width:32px;"><div class="skel" style="height:11px;width:24px;border-radius:3px;margin:0 auto;"></div><div style="font-size:8px;color:var(--text-muted);margin-top:3px;">PTS</div></div>
+            <div style="text-align:center;min-width:28px;"><div class="skel" style="height:11px;width:20px;border-radius:3px;margin:0 auto;"></div><div style="font-size:8px;color:var(--text-muted);margin-top:3px;">GF</div></div>
+            <div style="text-align:center;min-width:28px;"><div class="skel" style="height:11px;width:20px;border-radius:3px;margin:0 auto;"></div><div style="font-size:8px;color:var(--text-muted);margin-top:3px;">GC</div></div>
+          </div>
+        </div>`).join('')}
+      </div>
+
+    </div><!-- /ft-rivales -->
+
+    <!-- ④ DISCIPLINA -->
+    <div class="ft-module content-area" id="ft-disciplina">
+
+      <div class="ft-kpi-row" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));">
+        <div class="ft-kpi amber"><div class="kpi-val">—</div><div class="kpi-lbl">T. Amarillas</div><div class="kpi-sub">temporada completa</div></div>
+        <div class="ft-kpi red"><div class="kpi-val">—</div><div class="kpi-lbl">T. Rojas directas</div><div class="kpi-sub">expulsiones</div></div>
+        <div class="ft-kpi red"><div class="kpi-val">—</div><div class="kpi-lbl">Dobles amarillas</div><div class="kpi-sub">= roja acumulación</div></div>
+        <div class="ft-kpi"><div class="kpi-val">—</div><div class="kpi-lbl">Partidos sancionados</div><div class="kpi-sub">jugadores fuera por sanción</div></div>
+        <div class="ft-kpi"><div class="kpi-val">—</div><div class="kpi-lbl">TA del rival medio</div><div class="kpi-sub">vs liga · pendiente</div></div>
+      </div>
+
+      <div class="ft-grid-2">
+        <div class="ft-rank">
+          <div class="ft-rank-header">🟨 Ranking amarillas — Jugadores</div>
+          ${[1,2,3,4,5,6,7].map(n=>`
+          <div class="ft-rank-row">
+            <div class="ft-rank-pos">${n}</div>
+            <div style="flex:1;"><div class="skel" style="height:12px;width:130px;border-radius:3px;margin-bottom:4px;"></div><div class="skel" style="height:9px;width:80px;border-radius:3px;"></div></div>
+            <div class="ft-rank-val amber">—</div>
+          </div>`).join('')}
+        </div>
+        <div>
+          <div class="ft-rank" style="margin-bottom:14px;">
+            <div class="ft-rank-header">🟥 Rojas directas</div>
+            ${[1,2].map(n=>`
+            <div class="ft-rank-row">
+              <div class="ft-rank-pos">${n}</div>
+              <div style="flex:1;"><div class="skel" style="height:12px;width:130px;border-radius:3px;margin-bottom:4px;"></div><div class="skel" style="height:9px;width:80px;border-radius:3px;"></div></div>
+              <div class="ft-rank-val red">—</div>
+            </div>`).join('')}
+          </div>
+          <div class="ft-rank">
+            <div class="ft-rank-header">👔 Cuerpo técnico — Tarjetas</div>
+            ${[1,2,3].map(n=>`
+            <div class="ft-rank-row">
+              <div class="ft-rank-pos">${n}</div>
+              <div style="flex:1;"><div class="skel" style="height:12px;width:130px;border-radius:3px;margin-bottom:4px;"></div><div class="skel" style="height:9px;width:80px;border-radius:3px;"></div></div>
+              <div class="ft-rank-val amber">—</div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Evolución disciplinaria -->
+      <div class="ft-chart-wrap">
+        <div class="chart-title">📉 Evolución de tarjetas por tramo de temporada</div>
+        <div class="ft-pending-note">⚠ Pendiente de datos verificados</div>
+        <div style="display:flex;gap:8px;align-items:flex-end;height:80px;padding-top:8px;">
+          ${['J1–5','J6–10','J11–15','J16–20','J21–25','J26–30'].map(t=>`
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <div class="skel" style="width:100%;height:${30+Math.round(Math.random()*40)}px;border-radius:4px 4px 0 0;"></div>
+            <div style="font-size:9px;color:var(--text-muted);">${t}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+    </div><!-- /ft-disciplina -->
+
+    <!-- ⑤ ÁRBITROS -->
+    <div class="ft-module content-area" id="ft-arbitros">
+
+      <div class="ft-kpi-row" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));">
+        <div class="ft-kpi"><div class="kpi-val">—</div><div class="kpi-lbl">Árbitros distintos</div><div class="kpi-sub">a lo largo de la temporada</div></div>
+        <div class="ft-kpi green"><div class="kpi-val">—%</div><div class="kpi-lbl">Victorias con árbitro</div><div class="kpi-sub">mejor ratio</div></div>
+        <div class="ft-kpi amber"><div class="kpi-val">—</div><div class="kpi-lbl">TA Racing (media)</div><div class="kpi-sub">por partido como local</div></div>
+        <div class="ft-kpi amber"><div class="kpi-val">—</div><div class="kpi-lbl">TA Racing (media)</div><div class="kpi-sub">por partido como visitante</div></div>
+      </div>
+
+      <div class="ft-chart-wrap">
+        <div class="chart-title">📋 Árbitros de temporada — Todos los partidos</div>
+        <div class="ft-pending-note">⚠ Pendiente de verificación completa</div>
+        <div style="overflow-x:auto;margin-top:8px;">
+          <table class="ft-arb-table">
+            <thead>
+              <tr>
+                <th>Árbitro</th>
+                <th>PJ</th>
+                <th>V</th>
+                <th>E</th>
+                <th>D</th>
+                <th>TA Racing</th>
+                <th>TR Racing</th>
+                <th>TA rival</th>
+                <th>Sesgo</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Array(8).fill(0).map((_,i)=>`
+              <tr>
+                <td><div class="skel" style="height:12px;width:160px;border-radius:3px;"></div></td>
+                <td>—</td><td>—</td><td>—</td><td>—</td>
+                <td style="color:var(--accent-amber)">—</td>
+                <td style="color:var(--accent-red)">—</td>
+                <td>—</td>
+                <td><span class="ft-arb-pill e">—</span></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="ft-chart-wrap">
+        <div class="chart-title">⚖️ Sesgo local / visitante — TA recibidas por condición</div>
+        <div class="ft-chart-empty">
+          <div class="icon">⚖️</div>
+          <span>Pendiente de datos verificados</span>
+          <div style="width:100%;max-width:400px;margin-top:12px;">
+            <div class="skel" style="height:100px;border-radius:8px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ft-arbitros -->
+
+    <!-- ⑥ VALORACIÓN DEL CUERPO TÉCNICO -->
+    <div class="ft-module content-area" id="ft-valoracion">
+
+      <!-- Hitos de temporada -->
+      <div class="ft-grid-2">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">📌 Hitos de temporada</div>
+          <div class="ft-timeline">
+            <div class="ft-hito">
+              <div class="hito-j">J1 · Inicio</div>
+              <div class="hito-text">Arranque de la temporada</div>
+              <div class="hito-sub">Pendiente de narrativa</div>
+            </div>
+            <div class="ft-hito">
+              <div class="hito-j">J6–J13 · Mejor racha</div>
+              <div class="hito-text">8 victorias consecutivas</div>
+              <div class="hito-sub">Mejor tramo de la temporada</div>
+            </div>
+            <div class="ft-hito">
+              <div class="hito-j">J14 · Crisis</div>
+              <div class="hito-text">Derrota vs Egabrense (H2H)</div>
+              <div class="hito-sub">Punto de inflexión táctico</div>
+            </div>
+            <div class="ft-hito pending">
+              <div class="hito-j">J22 · Sanción</div>
+              <div class="hito-text">Victoria anulada → derrota 3-0</div>
+              <div class="hito-sub">Alineación indebida · −3 pts reales</div>
+            </div>
+            <div class="ft-hito">
+              <div class="hito-j">J23–J30 · Reacción</div>
+              <div class="hito-text">8 victorias de 8 posibles</div>
+              <div class="hito-sub">Mejor cierre de temporada posible</div>
+            </div>
+            <div class="ft-hito pending">
+              <div class="hito-j">Final</div>
+              <div class="hito-text">Posición final · — pts</div>
+              <div class="hito-sub">Pendiente de verificar clasificación definitiva</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">📐 Métricas de gestión de plantilla</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            ${[
+              ['Jugadores con ≥1 minuto','—','de — convocados'],
+              ['Media de rotaciones por partido','—','jugadores distintos/jornada'],
+              ['Titular más frecuente','—','apariciones como titular'],
+              ['Jugador con más minutos','—','minutos acumulados'],
+              ['Distintos goleadores','—','jugadores han marcado'],
+              ['Partidos con la portería a 0','—','de 30 disputados'],
+            ].map(([lbl,val,sub])=>`
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);">
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;">${lbl}</div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${sub}</div>
+              </div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--racing-red);">${val}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- Nota editorial -->
+      <div style="background:linear-gradient(135deg,rgba(200,16,46,0.06),rgba(200,16,46,0.02));border:1px solid rgba(200,16,46,0.2);border-radius:var(--radius);padding:24px;margin-top:8px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--racing-red);margin-bottom:10px;">✏️ Valoración del cuerpo técnico</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;font-style:italic;">
+          "Espacio reservado para la narrativa de valoración de temporada por parte del cuerpo técnico. Incluirá reflexión sobre el modelo de juego, gestión del grupo, momentos clave, y conclusiones de cara a la próxima temporada."
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+          <div class="ft-pending-note">⚠ Pendiente · Redacción final</div>
+        </div>
+      </div>
+
+    </div><!-- /ft-valoracion -->
+
+  </div><!-- /final -->
 
 </div>
 
@@ -897,6 +1447,19 @@ function buildCompare() {
 
 document.getElementById('compareA').addEventListener('change', buildCompare);
 document.getElementById('compareB').addEventListener('change', buildCompare);
+
+// ---- Final de Temporada — tabs internos ----
+document.querySelectorAll('.ft-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.ft-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.ft;
+    document.querySelectorAll('.ft-module').forEach(m => m.classList.remove('active'));
+    const el = document.getElementById('ft-' + target);
+    if (el) el.classList.add('active');
+    document.querySelector('.main').scrollTop = 0;
+  });
+});
 </script>
 </body>
 </html>
