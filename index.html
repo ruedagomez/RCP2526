@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --racing-blue: #003D7A;
-  --racing-blue-light: #0058B0;
-  --racing-gold: #C8A84E;
-  --racing-gold-light: #E0C877;
-  --bg-dark: #0A0E17;
-  --bg-card: #111827;
-  --bg-card-hover: #1A2332;
-  --bg-sidebar: #070B12;
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --border: #1E293B;
+  --racing-red: #C8102E;
+  --racing-red-dark: #A00C24;
+  --racing-red-light: #E8203E;
+  --racing-white: #F5F5F5;
+  --bg-dark: #0D0D0D;
+  --bg-card: #161616;
+  --bg-card-hover: #1F1F1F;
+  --bg-sidebar: #080808;
+  --text-primary: #F5F5F5;
+  --text-secondary: #AAAAAA;
+  --text-muted: #666666;
+  --border: #242424;
   --accent-green: #22C55E;
   --accent-red: #EF4444;
   --accent-amber: #F59E0B;
@@ -55,19 +55,16 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
+  background: linear-gradient(180deg, #1a0007 0%, transparent 100%);
 }
 
 .club-crest {
-  width: 48px; height: 48px;
-  background: var(--racing-blue);
+  width: 52px; height: 52px;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  color: var(--racing-gold);
-  letter-spacing: 1px;
-  border: 2px solid var(--racing-gold);
+  overflow: hidden;
+  border: 2px solid rgba(200,16,46,0.4);
   flex-shrink: 0;
+  background: #111;
 }
 
 .club-info h2 {
@@ -132,7 +129,7 @@ body {
   transform: translateY(-50%);
   width: 3px;
   height: 60%;
-  background: var(--racing-gold);
+  background: var(--racing-white);
   border-radius: 3px;
 }
 
@@ -146,8 +143,8 @@ body {
 .nav-badge {
   margin-left: auto;
   font-size: 10px;
-  background: var(--racing-blue);
-  color: var(--racing-gold);
+  background: var(--racing-red);
+  color: white;
   padding: 2px 7px;
   border-radius: 10px;
   font-weight: 700;
@@ -207,7 +204,7 @@ body {
   position: absolute;
   top: -30%; right: -20%;
   width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(0,61,122,0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(200,16,46,0.12) 0%, transparent 70%);
   border-radius: 50%;
 }
 
@@ -216,7 +213,7 @@ body {
   position: absolute;
   bottom: -20%; left: 20%;
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(200,168,78,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(200,16,46,0.06) 0%, transparent 70%);
   border-radius: 50%;
 }
 
@@ -242,7 +239,7 @@ body {
   z-index: 1;
 }
 
-.portada h1 .gold { color: var(--racing-gold); }
+.portada h1 .gold { color: var(--racing-red); }
 
 .portada-subtitle {
   font-size: 18px;
@@ -742,8 +739,8 @@ body {
 .wireframe-badge {
   position: fixed;
   top: 16px; right: 16px;
-  background: var(--racing-gold);
-  color: var(--bg-dark);
+  background: var(--racing-red);
+  color: white;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -993,7 +990,9 @@ body {
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="sidebar-header">
-    <div class="club-crest">RCP</div>
+    <div class="club-crest">
+  <img src="https://www.dropbox.com/scl/fi/pliot800d1s9ii59yi3pp/escudoRacing.jpg?rlkey=oga1626afuslz76417ydjigct&st=seh8hotz&dl=1" style="width:100%;height:100%;object-fit:cover;" alt="RCP">
+</div>
     <div class="club-info">
       <h2>Racing Club<br>Portuense</h2>
       <span>Temporada 2025/2026</span>
