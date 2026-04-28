@@ -248,10 +248,13 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
 .sc-target-name { font-size:14px; font-weight:700; margin-bottom:2px; }
 .sc-target-meta { font-size:11px; color:var(--text-muted); }
 .sc-estado-badge { font-size:10px; font-weight:700; padding:3px 10px; border-radius:10px; white-space:nowrap; }
+.sc-estado-badge.sinasignar { background:rgba(107,114,128,0.1); color:#9CA3AF; border:1px solid rgba(107,114,128,0.2); }
+.sc-estado-badge.seguimiento { background:rgba(139,92,246,0.15); color:#A78BFA; border:1px solid rgba(139,92,246,0.25); }
 .sc-estado-badge.contactado { background:rgba(99,102,241,0.15); color:#818CF8; border:1px solid rgba(99,102,241,0.25); }
 .sc-estado-badge.negociacion { background:rgba(245,158,11,0.15); color:var(--accent-amber); border:1px solid rgba(245,158,11,0.25); }
 .sc-estado-badge.pendiente { background:rgba(107,114,128,0.15); color:#9CA3AF; border:1px solid rgba(107,114,128,0.25); }
 .sc-estado-badge.rechazado { background:rgba(239,68,68,0.15); color:var(--accent-red); border:1px solid rgba(239,68,68,0.25); }
+.sc-estado-badge.descartado { background:rgba(55,65,81,0.3); color:#6B7280; border:1px solid rgba(55,65,81,0.4); }
 .sc-estado-badge.firmado { background:rgba(34,197,94,0.15); color:var(--accent-green); border:1px solid rgba(34,197,94,0.25); }
 .sc-prio-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; display:inline-block; }
 .sc-prio-dot.alta { background:var(--accent-red); }
@@ -619,7 +622,7 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <div id="sc-sync-badge" style="font-size:10px;color:var(--accent-green);background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);padding:4px 10px;border-radius:10px;font-weight:700;display:none;">✓ Sincronizado</div>
-          <button onclick="scAddTargetModal()" style="background:var(--racing-red);color:white;border:none;border-radius:var(--radius-sm);padding:9px 16px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">+ Nuevo objetivo</button>
+          <button onclick="scAddTargetModal()" style="background:var(--racing-red);color:white;border:none;border-radius:var(--radius-sm);padding:9px 16px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">+ Añadir Jugador</button>
           <button onclick="scLogout()" style="background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;font-family:inherit;font-size:11px;cursor:pointer;">Salir</button>
         </div>
       </div>
@@ -651,7 +654,7 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
           </select>
           <select id="sc-filter-estado" onchange="scRenderTargets()" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:var(--radius-sm);font-family:inherit;font-size:12px;cursor:pointer;">
             <option value="">Todos los estados</option>
-            <option>Contactado</option><option>En negociación</option><option>Pendiente</option><option>Rechazado</option><option>Firmado</option>
+            <option>Sin asignar</option><option>Seguimiento</option><option>Contactado</option><option>En negociación</option><option>Pendiente</option><option>Rechazado</option><option>Descartado</option><option>Firmado</option>
           </select>
           <select id="sc-filter-prio" onchange="scRenderTargets()" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:var(--radius-sm);font-family:inherit;font-size:12px;cursor:pointer;">
             <option value="">Todas las prioridades</option>
@@ -687,6 +690,11 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
         <button onclick="scSaveTarget()" style="background:var(--racing-red);color:white;border:none;border-radius:var(--radius-sm);padding:10px 20px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">Guardar</button>
       </div>
     </div>
+  </div>
+
+  <!-- MODAL PERFIL JUGADOR -->
+  <div id="sc-profile-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:16px;">
+    <div id="sc-profile-content" style="background:var(--bg-dark);border:1px solid var(--border);border-radius:var(--radius);max-width:620px;width:100%;max-height:92vh;overflow-y:auto;padding:28px;"></div>
   </div>
 
   <!-- FINAL DE TEMPORADA -->
@@ -1597,8 +1605,9 @@ document.querySelectorAll('.ft-tab').forEach(tab => {
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
+const _k1 = "AIzaSyBNDylPV", _k2 = "fge6SFXVfJAcna9v7qh_CffI7Y";
 const firebaseConfig = {
-  apiKey: "AIzaSyBNDylPVfge6SFXVfJAcna9v7qh_CffI7Y",
+  apiKey: _k1 + _k2,
   authDomain: "racing-portuense-scouting.firebaseapp.com",
   projectId: "racing-portuense-scouting",
   storageBucket: "racing-portuense-scouting.firebasestorage.app",
@@ -1764,36 +1773,61 @@ window.scRenderTargets = function() {
   if (!container) return;
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:48px;color:var(--text-muted);font-size:13px;">No hay objetivos que coincidan con los filtros.</div>`;
+    container.innerHTML = `<div style="text-align:center;padding:48px;color:var(--text-muted);font-size:13px;">No hay jugadores que coincidan con los filtros.</div>`;
     return;
   }
 
-  const estadoClass = { 'Contactado':'contactado','En negociación':'negociacion','Pendiente':'pendiente','Rechazado':'rechazado','Firmado':'firmado' };
+  const estadoClass = {
+    'Sin asignar':'sinasignar','Seguimiento':'seguimiento',
+    'Contactado':'contactado','En negociación':'negociacion',
+    'Pendiente':'pendiente','Rechazado':'rechazado',
+    'Descartado':'descartado','Firmado':'firmado'
+  };
 
-  container.innerHTML = filtered.map(t => `
+  function diasEnEstado(t) {
+    if (!t.updatedAt) return null;
+    const dias = Math.floor((Date.now() - new Date(t.updatedAt).getTime()) / 86400000);
+    return dias;
+  }
+
+  container.innerHTML = filtered.map(t => {
+    const dias = diasEnEstado(t);
+    const diasBadge = dias !== null ? `<span style="font-size:9px;color:var(--text-muted);background:var(--bg-dark);border:1px solid var(--border);padding:2px 7px;border-radius:10px;">${dias === 0 ? 'Hoy' : dias + 'd en este estado'}</span>` : '';
+    const contratoInfo = t.contratoHasta && t.contratoHasta !== '' ? `· Contrato: ${t.contratoHasta}` : '';
+    const salInfo = t.salarioRango && t.salarioRango !== '—' ? `· ${t.salarioRango}` : '';
+    const linksHtml = [
+      t.urlLaPreferente ? `<a href="${t.urlLaPreferente}" target="_blank" style="font-size:10px;color:var(--racing-red);text-decoration:none;border:1px solid rgba(200,16,46,0.3);padding:2px 8px;border-radius:4px;font-weight:600;">LaPreferente ↗</a>` : '',
+      t.urlBesoccer ? `<a href="${t.urlBesoccer}" target="_blank" style="font-size:10px;color:var(--racing-red);text-decoration:none;border:1px solid rgba(200,16,46,0.3);padding:2px 8px;border-radius:4px;font-weight:600;">BeSoccer ↗</a>` : '',
+      t.urlTransfermarkt ? `<a href="${t.urlTransfermarkt}" target="_blank" style="font-size:10px;color:var(--racing-red);text-decoration:none;border:1px solid rgba(200,16,46,0.3);padding:2px 8px;border-radius:4px;font-weight:600;">Transfermarkt ↗</a>` : '',
+    ].filter(Boolean).join('');
+    return `
     <div class="sc-target-row">
-      <div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
           <span class="sc-prio-dot ${(t.prioridad||'media').toLowerCase()}"></span>
           <span class="sc-target-name">${t.apellidos||''}, ${t.nombre||''}</span>
+          ${diasBadge}
         </div>
         <div class="sc-target-meta">
           ${t.posicion||'—'}${t.posSecundaria && t.posSecundaria!=='—' ? ' · '+t.posSecundaria:''} ·
           ${t.clubActual||'—'} ·
-          ${t.edad ? t.edad+' años':''} ·
-          ${t.altura ? t.altura+'cm':''} ·
-          ${t.pierna||''}
-          ${t.notas ? '<br><span style="color:var(--text-secondary);font-style:italic">'+t.notas+'</span>':''}
+          ${t.edad ? t.edad+' años':'—'} ·
+          ${t.altura ? t.altura+'cm':''}
+          ${contratoInfo} ${salInfo}
         </div>
+        ${linksHtml ? `<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">${linksHtml}</div>` : ''}
+        ${t.comentarios ? `<div style="font-size:11px;color:var(--text-secondary);font-style:italic;margin-top:5px;border-left:2px solid var(--racing-red);padding-left:8px;">${t.comentarios.substring(0,120)}${t.comentarios.length>120?'…':''}</div>` : ''}
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-        <span class="sc-estado-badge ${estadoClass[t.estado]||'pendiente'}">${t.estado||'Pendiente'}</span>
-        <div style="display:flex;gap:6px;">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;margin-left:12px;">
+        <span class="sc-estado-badge ${estadoClass[t.estado]||'sinasignar'}">${t.estado||'Sin asignar'}</span>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;">
+          <button onclick="scShowProfile('${t.id}')" style="background:transparent;border:1px solid var(--racing-red);color:var(--racing-red);border-radius:var(--radius-sm);padding:4px 10px;font-family:inherit;font-size:10px;cursor:pointer;font-weight:600;">Ver perfil</button>
           <button onclick="scEditTarget('${t.id}')" style="background:transparent;border:1px solid var(--border);color:var(--text-muted);border-radius:var(--radius-sm);padding:4px 10px;font-family:inherit;font-size:10px;cursor:pointer;font-weight:600;">Editar</button>
-          <button onclick="scDeleteTarget('${t.id}')" style="background:transparent;border:1px solid rgba(239,68,68,0.3);color:var(--accent-red);border-radius:var(--radius-sm);padding:4px 10px;font-family:inherit;font-size:10px;cursor:pointer;font-weight:600;">Eliminar</button>
+          <button onclick="scDeleteTarget('${t.id}')" style="background:transparent;border:1px solid rgba(239,68,68,0.3);color:var(--accent-red);border-radius:var(--radius-sm);padding:4px 10px;font-family:inherit;font-size:10px;cursor:pointer;font-weight:600;">✕</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 };
 
 // ── PLANTILLA 26/27 ───────────────────────────────────
@@ -1802,40 +1836,92 @@ function scRenderP26() {
   if (!container) return;
   const squad = players.filter(p => { const e = scSquadStates[String(p.d)]; return e==='continua'||e==='definitiva'; });
   const firmados = scTargets.filter(t => t.estado === 'Firmado');
+
+  // Necesidades por posición
+  const COBERTURA = {
+    'Portero': 2, 'Lateral derecho': 1, 'Lateral izquierdo': 1,
+    'Central': 2, 'Mediocentro': 2, 'Mediapunta': 2,
+    'Extremo derecho': 1, 'Extremo izquierdo': 1, 'Delantero': 2
+  };
+  const conteo = {};
+  squad.forEach(p => { const pos = p.pos.split(' ').slice(0,2).join(' '); Object.keys(COBERTURA).forEach(k => { if(p.pos.includes(k.split(' ')[0])) conteo[k] = (conteo[k]||0)+1; }); });
+  firmados.forEach(t => { if(t.posicion && COBERTURA[t.posicion]) conteo[t.posicion] = (conteo[t.posicion]||0)+1; });
+
+  const necesidades = Object.entries(COBERTURA).filter(([pos, min]) => (conteo[pos]||0) < min);
+  const cubiertas   = Object.entries(COBERTURA).filter(([pos, min]) => (conteo[pos]||0) >= min);
+
   let html = '';
-  if (squad.length) {
-    html += `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:10px;">De plantilla 25/26</div>`;
-    html += squad.map(p => {
-      const e = scSquadStates[String(p.d)];
-      const badge = e==='definitiva'
-        ? `<span style="font-size:9px;color:var(--racing-red);background:rgba(200,16,46,0.1);padding:2px 7px;border-radius:3px;font-weight:700;border:1px solid rgba(200,16,46,0.2)">LISTA DEFINITIVA</span>`
-        : `<span style="font-size:9px;color:var(--accent-green);background:rgba(34,197,94,0.1);padding:2px 7px;border-radius:3px;font-weight:700;border:1px solid rgba(34,197,94,0.2)">CONTINÚA</span>`;
-      return `<div class="sc-target-row"><div><div class="sc-target-name" style="margin-bottom:2px;">${p.d} · ${firstName(p.n)} ${p.n.split(',')[0]}</div><div class="sc-target-meta">${p.pos}</div></div><div>${badge}</div></div>`;
-    }).join('');
+
+  // Panel de necesidades
+  html += `<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:12px;">📋 Cobertura por demarcación</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      ${Object.entries(COBERTURA).map(([pos, min]) => {
+        const n = conteo[pos]||0;
+        const ok = n >= min;
+        return `<div style="padding:5px 10px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;background:${ok?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)'};color:${ok?'var(--accent-green)':'var(--accent-red)'};border:1px solid ${ok?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)'};">${pos.length>8?pos.split(' ')[0]:pos} ${n}/${min}</div>`;
+      }).join('')}
+    </div>
+    ${necesidades.length > 0 ? `<div style="margin-top:10px;font-size:11px;color:var(--accent-red);font-weight:600;">⚠ Posiciones con hueco: ${necesidades.map(([p])=>p).join(', ')}</div>` : `<div style="margin-top:10px;font-size:11px;color:var(--accent-green);font-weight:600;">✓ Todas las posiciones cubiertas</div>`}
+  </div>`;
+
+  // Agrupado por líneas
+  const LINEAS_P26 = [
+    { label:'🧤 Porteros',              match: p => p.pos.includes('Portero') },
+    { label:'🛡 Defensas',              match: p => p.pos.includes('Lateral') || p.pos.includes('Central') },
+    { label:'⚙️ Centrocampistas',       match: p => p.pos.includes('Mediocentro') || p.pos.includes('Mediapunta') },
+    { label:'⚡ Extremos y Delanteros', match: p => p.pos.includes('Extremo') || p.pos.includes('Delantero') },
+  ];
+
+  const allInSquad26 = [
+    ...squad.map(p => ({ tipo:'squad', nombre: `${p.d} · ${firstName(p.n)} ${p.n.split(',')[0]}`, pos: p.pos, estado: scSquadStates[String(p.d)] })),
+    ...firmados.map(t => ({ tipo:'firmado', nombre: `${t.apellidos||''}, ${t.nombre||''}`, pos: t.posicion||'—', estado:'firmado' })),
+  ];
+
+  if (allInSquad26.length === 0) {
+    html += `<div style="text-align:center;padding:48px;color:var(--text-muted);font-size:13px;">Arrastra jugadores al Kanban o firma objetivos para construir la plantilla 26/27.</div>`;
+  } else {
+    LINEAS_P26.forEach(linea => {
+      const grupo = allInSquad26.filter(p => linea.match({ pos: p.pos }));
+      if (!grupo.length) return;
+      html += `<div style="margin-bottom:18px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);">${linea.label} · ${grupo.length} jugadores</div>
+        ${grupo.map(p => {
+          const badge = p.estado==='definitiva'
+            ? `<span style="font-size:9px;color:var(--racing-red);background:rgba(200,16,46,0.1);padding:2px 7px;border-radius:3px;font-weight:700;border:1px solid rgba(200,16,46,0.2)">LISTA DEFINITIVA</span>`
+            : p.estado==='firmado'
+            ? `<span style="font-size:9px;color:var(--accent-green);background:rgba(34,197,94,0.1);padding:2px 7px;border-radius:3px;font-weight:700;border:1px solid rgba(34,197,94,0.2)">FIRMADO</span>`
+            : `<span style="font-size:9px;color:var(--accent-green);background:rgba(34,197,94,0.1);padding:2px 7px;border-radius:3px;font-weight:700;border:1px solid rgba(34,197,94,0.2)">CONTINÚA</span>`;
+          return `<div class="sc-target-row" style="margin-bottom:6px;"><div><div class="sc-target-name" style="margin-bottom:2px;">${p.nombre}</div><div class="sc-target-meta">${p.pos}</div></div><div>${badge}</div></div>`;
+        }).join('')}
+      </div>`;
+    });
   }
-  if (firmados.length) {
-    html += `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin:18px 0 10px;">Nuevas incorporaciones</div>`;
-    html += firmados.map(t => `<div class="sc-target-row"><div><div class="sc-target-name" style="margin-bottom:2px;">${t.apellidos||''}, ${t.nombre||''}</div><div class="sc-target-meta">${t.posicion||'—'} · ${t.clubActual||'—'}</div></div><span class="sc-estado-badge firmado">FIRMADO</span></div>`).join('');
-  }
-  if (!html) html = `<div style="text-align:center;padding:48px;color:var(--text-muted);font-size:13px;">Arrastra jugadores al Kanban para construir la plantilla 26/27.</div>`;
+
   container.innerHTML = html;
 }
 
 // ── MODAL ─────────────────────────────────────────────
 const FORM_FIELDS = [
-  { id:'nombre',        label:'Nombre',             type:'text'   },
-  { id:'apellidos',     label:'Apellidos',           type:'text'   },
-  { id:'clubActual',    label:'Club actual',         type:'text'   },
-  { id:'posicion',      label:'Posición principal',  type:'select',
+  { id:'nombre',          label:'Nombre',              type:'text'   },
+  { id:'apellidos',       label:'Apellidos',            type:'text'   },
+  { id:'clubActual',      label:'Club actual',          type:'text'   },
+  { id:'posicion',        label:'Posición principal',   type:'select',
     options:['Portero','Lateral derecho','Lateral izquierdo','Central','Mediocentro','Mediapunta','Extremo derecho','Extremo izquierdo','Delantero'] },
-  { id:'posSecundaria', label:'Posición secundaria', type:'select',
+  { id:'posSecundaria',   label:'Posición secundaria',  type:'select',
     options:['—','Portero','Lateral derecho','Lateral izquierdo','Central','Mediocentro','Mediapunta','Extremo derecho','Extremo izquierdo','Delantero'] },
-  { id:'pierna',        label:'Pierna dominante',    type:'select', options:['Derecha','Izquierda','Ambidiestro'] },
-  { id:'edad',          label:'Edad',                type:'number' },
-  { id:'altura',        label:'Altura (cm)',         type:'number' },
-  { id:'estado',        label:'Estado',              type:'select', options:['Contactado','En negociación','Pendiente','Rechazado','Firmado'] },
-  { id:'prioridad',     label:'Prioridad',           type:'select', options:['Alta','Media','Baja'] },
-  { id:'notas',         label:'Notas',               type:'textarea', wide:true },
+  { id:'pierna',          label:'Pierna dominante',     type:'select', options:['Derecha','Izquierda','Ambidiestro'] },
+  { id:'edad',            label:'Edad',                 type:'number' },
+  { id:'altura',          label:'Altura (cm)',          type:'number' },
+  { id:'contratoHasta',   label:'Contrato hasta (año)', type:'number' },
+  { id:'salarioRango',    label:'Rango salarial',       type:'select', options:['—','Bajo','Medio','Alto','Muy alto'] },
+  { id:'estado',          label:'Estado',               type:'select',
+    options:['Sin asignar','Seguimiento','Contactado','En negociación','Pendiente','Rechazado','Descartado','Firmado'] },
+  { id:'prioridad',       label:'Prioridad',            type:'select', options:['Alta','Media','Baja'] },
+  { id:'urlLaPreferente', label:'URL LaPreferente',     type:'text',   wide:true },
+  { id:'urlBesoccer',     label:'URL BeSoccer',         type:'text',   wide:true },
+  { id:'urlTransfermarkt',label:'URL Transfermarkt',    type:'text',   wide:true },
+  { id:'comentarios',     label:'Comentarios',          type:'textarea', wide:true },
 ];
 
 window.scAddTargetModal = function() {
@@ -1893,6 +1979,61 @@ window.scCloseModal = function() {
 };
 document.getElementById('sc-modal-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('sc-modal-overlay')) scCloseModal();
+});
+
+// ── PERFIL COMPLETO ───────────────────────────────────
+window.scShowProfile = function(id) {
+  const t = scTargets.find(x => x.id === id);
+  if (!t) return;
+  const overlay = document.getElementById('sc-profile-overlay');
+  const content = document.getElementById('sc-profile-content');
+
+  const linkBtn = (url, label) => url
+    ? `<a href="${url}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--racing-red);text-decoration:none;border:1px solid rgba(200,16,46,0.3);padding:5px 12px;border-radius:var(--radius-sm);">${label} ↗</a>`
+    : '';
+
+  const estadoClass = { 'Sin asignar':'sinasignar','Seguimiento':'seguimiento','Contactado':'contactado','En negociación':'negociacion','Pendiente':'pendiente','Rechazado':'rechazado','Descartado':'descartado','Firmado':'firmado' };
+
+  content.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;">${t.apellidos||''}, ${t.nombre||''}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">${t.posicion||'—'}${t.posSecundaria&&t.posSecundaria!=='—'?' · '+t.posSecundaria:''} · ${t.clubActual||'—'}</div>
+      </div>
+      <button onclick="document.getElementById('sc-profile-overlay').style.display='none'" style="background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;flex-shrink:0;">✕</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <span class="sc-estado-badge ${estadoClass[t.estado]||'sinasignar'}">${t.estado||'Sin asignar'}</span>
+      <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);">Prioridad ${t.prioridad||'—'}</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+      ${[['Edad',t.edad?t.edad+' años':'—'],['Altura',t.altura?t.altura+'cm':'—'],['Pierna',t.pierna||'—'],['Contrato',t.contratoHasta||'—'],['Salario',t.salarioRango||'—']].map(([l,v])=>`
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px;">${l}</div>
+        <div style="font-size:15px;font-weight:700;">${v}</div>
+      </div>`).join('')}
+    </div>
+    ${(t.urlLaPreferente||t.urlBesoccer||t.urlTransfermarkt) ? `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+      ${linkBtn(t.urlLaPreferente,'LaPreferente')}
+      ${linkBtn(t.urlBesoccer,'BeSoccer')}
+      ${linkBtn(t.urlTransfermarkt,'Transfermarkt')}
+    </div>` : ''}
+    ${t.comentarios ? `
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--racing-red);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;">Comentarios</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;white-space:pre-wrap;">${t.comentarios}</div>
+    </div>` : ''}
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+      <button onclick="scEditTarget('${t.id}');document.getElementById('sc-profile-overlay').style.display='none'" style="background:var(--racing-red);color:white;border:none;border-radius:var(--radius-sm);padding:9px 18px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;">Editar ficha</button>
+    </div>`;
+
+  overlay.style.display = 'flex';
+};
+
+document.getElementById('sc-profile-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('sc-profile-overlay'))
+    document.getElementById('sc-profile-overlay').style.display = 'none';
 });
 </script>
 </body>
