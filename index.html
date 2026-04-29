@@ -1142,14 +1142,20 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
 
 <!-- VIDEO MODAL -->
 <div id="videoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeVideoModal()">
-  <div style="position:relative;width:100%;max-width:900px;">
-    <button onclick="closeVideoModal()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:26px;cursor:pointer;line-height:1;opacity:0.8;">✕</button>
-    <div id="videoModalTitle" style="color:white;font-size:13px;font-weight:700;margin-bottom:10px;opacity:0.7;"></div>
-    <video id="videoModalPlayer" controls controlsList="nodownload" playsinline
-      style="width:100%;border-radius:8px;background:#000;max-height:75vh;"
-      preload="none">
-      Tu navegador no soporta vídeo HTML5.
-    </video>
+  <div style="position:relative;width:100%;max-width:960px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div id="videoModalTitle" style="color:white;font-size:13px;font-weight:700;opacity:0.8;"></div>
+      <button onclick="closeVideoModal()" style="background:none;border:none;color:white;font-size:26px;cursor:pointer;line-height:1;opacity:0.8;flex-shrink:0;margin-left:16px;">✕</button>
+    </div>
+    <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;border-radius:8px;overflow:hidden;">
+      <video id="videoModalPlayer" controls playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;background:#000;"
+        preload="metadata">
+      </video>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <a id="videoModalExternal" href="#" target="_blank" style="font-size:11px;color:rgba(255,255,255,0.4);text-decoration:none;">↗ Abrir en Dropbox si no carga</a>
+    </div>
   </div>
 </div>
 
@@ -1457,16 +1463,34 @@ function openVideoModal(url, title) {
   const modal = document.getElementById('videoModal');
   const player = document.getElementById('videoModalPlayer');
   const titleEl = document.getElementById('videoModalTitle');
-  player.src = url;
+  const extLink = document.getElementById('videoModalExternal');
+  const streamUrl = url.includes('raw=1') ? url : url.replace('dl=0','raw=1');
+  const externalUrl = streamUrl.replace('raw=1','dl=0');
   titleEl.textContent = title;
+  extLink.href = externalUrl;
+  extLink.style.color = 'rgba(255,255,255,0.4)';
+  extLink.textContent = '\u2197 Abrir en Dropbox si no carga';
   modal.style.display = 'flex';
-  player.play().catch(()=>{});
+  player.src = streamUrl;
+  player.load();
+  player.onerror = () => {
+    extLink.style.color = 'var(--racing-red)';
+    extLink.textContent = '\u2197 Ver v\u00eddeo en Dropbox';
+  };
+  const loadTimer = setTimeout(() => {
+    if (player.readyState === 0) {
+      extLink.style.color = 'var(--racing-red)';
+      extLink.textContent = '\u2197 Ver v\u00eddeo en Dropbox';
+    }
+  }, 3000);
+  player.oncanplay = () => { clearTimeout(loadTimer); player.play().catch(()=>{}); };
 }
 function closeVideoModal() {
   const modal = document.getElementById('videoModal');
   const player = document.getElementById('videoModalPlayer');
   player.pause();
-  player.src = '';
+  player.removeAttribute('src');
+  player.load();
   modal.style.display = 'none';
 }
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeVideoModal(); });
