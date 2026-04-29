@@ -376,6 +376,9 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
 
 /* nota pendiente */
 .ft-pending-note { display:inline-flex; align-items:center; gap:6px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--accent-amber); background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); padding:5px 12px; border-radius:20px; margin-bottom:16px; }
+
+/* VIDEO MODAL */
+#videoModal.active { display:flex !important; }
 </style>
 </head>
 <body>
@@ -1136,6 +1139,18 @@ body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg-dark); co
 
   </div><!-- /final -->
 
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeVideoModal()">
+  <div style="position:relative;width:100%;max-width:900px;">
+    <button onclick="closeVideoModal()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:26px;cursor:pointer;line-height:1;opacity:0.8;">✕</button>
+    <div id="videoModalTitle" style="color:white;font-size:13px;font-weight:700;margin-bottom:10px;opacity:0.7;"></div>
+    <video id="videoModalPlayer" controls controlsList="nodownload" playsinline
+      style="width:100%;border-radius:8px;background:#000;max-height:75vh;"
+      preload="none">
+      Tu navegador no soporta vídeo HTML5.
+    </video>
+  </div>
 </div>
 
 <div class="modal-overlay" id="playerModal">
@@ -1204,58 +1219,58 @@ const players = [
 ];
 
 const goals = [
-  {j:1, m:23, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/c18c8fzr02kqwmptcwnfz/J1.mp4?rlkey=wwslgnb4c4m8yhuzdi0jjq16w&dl=0'},
-  {j:2, m:46, p:"Domínguez Moreno, Manuel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/r0t4wu5n38jte4f7bsc6s/J2.mp4?rlkey=vjaz8lx0jc8novwn5uqehhz3r&dl=0'},
-  {j:3, m:53, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ufr68v7gt2y6e8c8wb0rj/J3.mp4?rlkey=nqro4qshl5vkl5fb8ygzujq6j&dl=0'},
+  {j:1, m:23, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/c18c8fzr02kqwmptcwnfz/J1.mp4?raw=1'},
+  {j:2, m:46, p:"Domínguez Moreno, Manuel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/r0t4wu5n38jte4f7bsc6s/J2.mp4?raw=1'},
+  {j:3, m:53, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ufr68v7gt2y6e8c8wb0rj/J3.mp4?raw=1'},
   {j:4, m:44, p:"Oca Contreras, Antonio Miguel", tipo:"NORMAL", video:null},
-  {j:6, m:1, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/wa49s7p8fv9ubjn4lv56y/J6_1_0.mp4?rlkey=wdif4ah30yt05iaq8arbfyzo8&dl=0'},
-  {j:6, m:5, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/euepy3b8tg2plbj82sobm/J6_2_0.mp4?rlkey=78ajkzggd7llum3kztnde71cg&dl=0'},
-  {j:6, m:8, p:"Cornejo Salas, Jacobo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ra1jgc5btgrzi1ck097t2/J6_3_0.mp4?rlkey=3fr2akqd06tdb6par25usz938&dl=0'},
-  {j:6, m:17, p:"Oca Contreras, Antonio Miguel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/5026blol0vrmf8q0osin3/J6_4_0.mp4?rlkey=vp5rsm9jqfpv95wbpvx7qlckl&dl=0'},
-  {j:6, m:40, p:"P.P.", tipo:"P.P.", video:'https://www.dropbox.com/scl/fi/l39qh7su5oohouexmu82e/J6_5_1.mp4?rlkey=fnminpaackjh3125hhhrkie8l&dl=0'},
-  {j:7, m:46, p:"Ruiz Herrera Sánchez, Cristian", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/g395ajps5kk87vnhhrqjk/J7_1-1.mp4?rlkey=zyvgymku8gmf4vkectbdcodys&dl=0'},
-  {j:7, m:65, p:"Jiménez Macías, Borja", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/2qhcobmjhp0gtj0azq6yx/J7_2-2.mp4?rlkey=z9kumemlkfoaludmtwysb52d7&dl=0'},
-  {j:7, m:68, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/0ke797qlyv0q0qw9dnroi/J7_3-2.mp4?rlkey=yy50t4tco24wj9dry94c3z4wu&dl=0'},
-  {j:7, m:89, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/8hb4foxp3pxa64k9hkphv/J7_4-2.mp4?rlkey=mf772wph07qcavx1g1tvw2jrz&dl=0'},
-  {j:8, m:8, p:"Romero Rodríguez, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/c38b7bgqnfld884nsktl9/J8_0_1.mp4?rlkey=4in9x2f3ppgm67br1p8a2qpch&dl=0'},
-  {j:8, m:46, p:"Bonilla Díaz, David", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/oizw9ldn4nb7nvcxg4r6o/J8_0_2.mp4?rlkey=30tdp3ecazlxmgpb5llpovuoo&dl=0'},
-  {j:8, m:60, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/x1wpydar78h3w4wm8qux8/J8_2_3.mp4?rlkey=rbowzjue1nqhq5b3zf62oqaxf&dl=0'},
-  {j:8, m:78, p:"Gil Navarro, Kevin Roberto", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/w1zfuzgqo6nyolr2r1rls/J8_2_4.mp4?rlkey=l38bqojydmdf8bce4dtev4ab3&dl=0'},
-  {j:9, m:54, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/glcpsk717rv5n3g6kmbmc/J9.mp4?rlkey=siowvt4u55nucd6in5xm4ehnh&dl=0'},
-  {j:10, m:25, p:"Cuevas Algeciras, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/5m7voiig1nddocc99nup9/J10_0_1.mp4?rlkey=jhn9zazb5f6pm23rc6mkgnkp8&dl=0'},
-  {j:10, m:41, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/wu85s1qx8hf217egm929f/J10_0_2.mp4?rlkey=vlsyda77cxe50jqf002b8fj4b&dl=0'},
-  {j:10, m:81, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/0osmkloy0nte1r3jcdr6q/J10_0_3.mp4?rlkey=zvucsszzhc1r0ydpilo1hor23&dl=0'},
-  {j:11, m:10, p:"Romero Rodríguez, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/r0nszh3b8jhhx8ll7p65f/J11.mp4?rlkey=o2jv8dfi83amwk34cc712rn72&dl=0'},
-  {j:12, m:23, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/0pv5utz5vn1bem0k6qe4r/J12.mp4?rlkey=w45anwd2git47e8gjt10sbsl5&dl=0'},
-  {j:13, m:78, p:"Cuevas Algeciras, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/odu2wmfhsw8ka60sxkjbp/J13_1_0.mp4?rlkey=3mz8p79riy7mj189yob2lzoy3&dl=0'},
-  {j:13, m:84, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/pvm8l41o9dd7vovj0shzy/J13_2_0.mp4?rlkey=v6ec8ihif8rddlqsx6gcke8mt&dl=0'},
-  {j:14, m:22, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/vxha39kdqjuei1k2r2v9w/J14.mp4?rlkey=hozp1l9q4n3ald7v6wveq4ol8&dl=0'},
-  {j:15, m:24, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/nqibpuks09fdno82ngltu/J15_1_0.mp4?rlkey=8do5920tfxpmstt9b3e9ba3l4&dl=0'},
-  {j:15, m:38, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/3dfmesfvhgjjhuzuijuk9/J15_2_0.mp4?rlkey=n54r4xlil3q3sqm9tpwytgi92&dl=0'},
-  {j:15, m:66, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/6p05a8t8w3aorbcriim5i/J15_3_0.mp4?rlkey=3imo6ahof221dlgquhfyxudhi&dl=0'},
-  {j:17, m:8, p:"Jiménez Macías, Borja", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/80mz8ypt8d1bmqb58nj4q/J17_0_1.mp4?rlkey=mz6244twcc8zd3o4htcitcnbt&dl=0'},
-  {j:17, m:82, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ej5586g67kwltcm32xb4b/J17_2_2.mp4?rlkey=vll01gczwvtwsn79w0o8qyhs3&dl=0'},
-  {j:18, m:60, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/zp52a9fr2paj4d3hw1y0w/J18.mp4?rlkey=lccpjav0hov54g4ww5v9rt0az&dl=0'},
-  {j:19, m:10, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/lz6yifockhicba2ccvnnd/J19_0_1.mp4?rlkey=sb1r90q3f46ki0g7lvb1fyt4e&dl=0'},
-  {j:19, m:22, p:"P.P.", tipo:"P.P.", video:'https://www.dropbox.com/scl/fi/uihpdb2nmobdlayc2oaid/J19_0_2.mp4?rlkey=3f1cfwb0q53y481shmjyczla0&dl=0'},
-  {j:19, m:89, p:"Sainz Hughes, José Luis", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/92cfqhlywho4mgl4i3iz1/J19_0_3.mp4?rlkey=bh5vth4aob7htopjf5exp8nd9&dl=0'},
-  {j:21, m:74, p:"Oca Contreras, Antonio Miguel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/p8lg7p70xcz24zvzmgz6g/J21.mp4?rlkey=kteb024yit4vp3frkqt6ty2f3&dl=0'},
-  {j:22, m:61, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/gu768rznnth1yq9g5ludq/J22_1_1.mp4?rlkey=6yq0z7cctu58ssd80yic15jry&dl=0'},
-  {j:22, m:66, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/3prjzbirzldnvfo9x5bty/J22_1_2.mp4?rlkey=6k1emdmfesukybyfg8wpw21hs&dl=0'},
-  {j:23, m:5, p:"Laínez Herrera, Daniel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/dnxdr08wvldpw0wktvwde/J23_1_0.mp4?rlkey=kvv8la1nmj77dr8chk8n3cjfi&dl=0'},
-  {j:23, m:16, p:"Garrido Fernández, Antonio Jesús", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/n80xlu829o3wma9r00e8b/J23_2_0.mp4?rlkey=x1l9y99yk8nfkpb052tbiqxx7&dl=0'},
-  {j:23, m:25, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/hsb73sst03tzz34rtb954/J23_3_0.mp4?rlkey=q6vr1it75wy6x5hbdks84ngi4&dl=0'},
-  {j:23, m:45, p:"Heredia Montoya, Manuel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/czobhysp9pm144nq6nuhm/J23_4_0.mp4?rlkey=8cljspqimnbbhfjocnch0fl8v&dl=0'},
-  {j:23, m:52, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/lu6vbpumn5rs3ersxkzkl/J23_5_0.mp4?rlkey=wxpsywcrpna1vq0s3cq7198k8&dl=0'},
-  {j:23, m:67, p:"Sainz Hughes, José Luis", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/urt40xrcipr94l01lw7ja/J23_6_0.mp4?rlkey=nx2qsbqbvp1tvkklwl8uxiwlk&dl=0'},
-  {j:23, m:77, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/7udfha01fg9uqj15700e3/J23_7_0.mp4?rlkey=ha7gs6ug02n3lee98qmqll3xz&dl=0'},
-  {j:24, m:21, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/sellq5g7sudfrbae8gvld/J24_0_1.mp4?rlkey=0qn9vrqd0s0bw6v55qczfgzt6&dl=0'},
-  {j:25, m:48, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:null},
-  {j:26, m:73, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/p557jxkd28o59gpfzs1uz/J26.mp4?rlkey=9i59zb77hgkcti8bhjmwc29v0&dl=0'},
-  {j:27, m:50, p:"Rodríguez Muñoz, José Luis", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ypylp9pmuyhw4rcwheeap/J27.mp4?rlkey=9gzrr1vrcrbttg6dojue5tac4&dl=0'},
-  {j:28, m:96, p:"Palacio, Elías Sebastián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/6z583vbybcl7sfvg8gfdu/J28.mp4?rlkey=iyxa1ep0yi0qd9gtd4yjdh8ww&dl=0'},
-  {j:29, m:18, p:"Romero Rodríguez, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/oc73okfnqkwt56zlkol1m/J29_1_0.mp4?rlkey=194ysdlna00yuzqby1r4xx29o&dl=0'},
-  {j:29, m:89, p:"Palacio, Elías Sebastián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/dvytcd24ebvcl8yl3ikmn/J29_2_0.mp4?rlkey=gs1bfrenx6rzhl7pei5qgv2qo&dl=0'},
+  {j:6, m:1, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/wa49s7p8fv9ubjn4lv56y/J6_1_0.mp4?raw=1'},
+  {j:6, m:5, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/euepy3b8tg2plbj82sobm/J6_2_0.mp4?raw=1'},
+  {j:6, m:8, p:"Cornejo Salas, Jacobo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ra1jgc5btgrzi1ck097t2/J6_3_0.mp4?raw=1'},
+  {j:6, m:17, p:"Oca Contreras, Antonio Miguel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/5026blol0vrmf8q0osin3/J6_4_0.mp4?raw=1'},
+  {j:6, m:40, p:"P.P.", tipo:"P.P.", video:'https://www.dropbox.com/scl/fi/l39qh7su5oohouexmu82e/J6_5_1.mp4?raw=1'},
+  {j:7, m:46, p:"Ruiz Herrera Sánchez, Cristian", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/g395ajps5kk87vnhhrqjk/J7_1-1.mp4?raw=1'},
+  {j:7, m:65, p:"Jiménez Macías, Borja", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/2qhcobmjhp0gtj0azq6yx/J7_2-2.mp4?raw=1'},
+  {j:7, m:68, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/0ke797qlyv0q0qw9dnroi/J7_3-2.mp4?raw=1'},
+  {j:7, m:89, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/8hb4foxp3pxa64k9hkphv/J7_4-2.mp4?raw=1'},
+  {j:8, m:8, p:"Romero Rodríguez, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/c38b7bgqnfld884nsktl9/J8_0_1.mp4?raw=1'},
+  {j:8, m:46, p:"Bonilla Díaz, David", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/oizw9ldn4nb7nvcxg4r6o/J8_0_2.mp4?raw=1'},
+  {j:8, m:60, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/x1wpydar78h3w4wm8qux8/J8_2_3.mp4?raw=1'},
+  {j:8, m:78, p:"Gil Navarro, Kevin Roberto", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/w1zfuzgqo6nyolr2r1rls/J8_2_4.mp4?raw=1'},
+  {j:9, m:54, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/glcpsk717rv5n3g6kmbmc/J9.mp4?raw=1'},
+  {j:10, m:25, p:"Cuevas Algeciras, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/5m7voiig1nddocc99nup9/J10_0_1.mp4?raw=1'},
+  {j:10, m:41, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/wu85s1qx8hf217egm929f/J10_0_2.mp4?raw=1'},
+  {j:10, m:81, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/0osmkloy0nte1r3jcdr6q/J10_0_3.mp4?raw=1'},
+  {j:11, m:10, p:"Romero Rodríguez, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/r0nszh3b8jhhx8ll7p65f/J11.mp4?raw=1'},
+  {j:12, m:23, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/0pv5utz5vn1bem0k6qe4r/J12.mp4?raw=1'},
+  {j:13, m:78, p:"Cuevas Algeciras, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/odu2wmfhsw8ka60sxkjbp/J13_1_0.mp4?rlkey=3mz8p79riy7mj189yob2lzoy3&raw=1'},
+  {j:13, m:84, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/pvm8l41o9dd7vovj0shzy/J13_2_0.mp4?rlkey=v6ec8ihif8rddlqsx6gcke8mt&raw=1'},
+  {j:14, m:22, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/vxha39kdqjuei1k2r2v9w/J14.mp4?raw=1'},
+  {j:15, m:24, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/nqibpuks09fdno82ngltu/J15_1_0.mp4?raw=1'},
+  {j:15, m:38, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/3dfmesfvhgjjhuzuijuk9/J15_2_0.mp4?raw=1'},
+  {j:15, m:66, p:"Rodríguez Romero, Hugo", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/6p05a8t8w3aorbcriim5i/J15_3_0.mp4?raw=1'},
+  {j:17, m:8, p:"Jiménez Macías, Borja", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/80mz8ypt8d1bmqb58nj4q/J17_0_1.mp4?raw=1'},
+  {j:17, m:82, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ej5586g67kwltcm32xb4b/J17_2_2.mp4?raw=1'},
+  {j:18, m:60, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/zp52a9fr2paj4d3hw1y0w/J18.mp4?raw=1'},
+  {j:19, m:10, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/lz6yifockhicba2ccvnnd/J19_0_1.mp4?raw=1'},
+  {j:19, m:22, p:"P.P.", tipo:"P.P.", video:'https://www.dropbox.com/scl/fi/uihpdb2nmobdlayc2oaid/J19_0_2.mp4?raw=1'},
+  {j:19, m:89, p:"Sainz Hughes, José Luis", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/92cfqhlywho4mgl4i3iz1/J19_0_3.mp4?raw=1'},
+  {j:21, m:74, p:"Oca Contreras, Antonio Miguel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/p8lg7p70xcz24zvzmgz6g/J21.mp4?raw=1'},
+  {j:22, m:61, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/gu768rznnth1yq9g5ludq/J22_1_1.mp4?raw=1'},
+  {j:22, m:66, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/3prjzbirzldnvfo9x5bty/J22_1_2.mp4?raw=1'},
+  {j:23, m:5, p:"Laínez Herrera, Daniel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/dnxdr08wvldpw0wktvwde/J23_1_0.mp4?raw=1'},
+  {j:23, m:16, p:"Garrido Fernández, Antonio Jesús", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/n80xlu829o3wma9r00e8b/J23_2_0.mp4?raw=1'},
+  {j:23, m:25, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/hsb73sst03tzz34rtb954/J23_3_0.mp4?raw=1'},
+  {j:23, m:45, p:"Heredia Montoya, Manuel", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/czobhysp9pm144nq6nuhm/J23_4_0.mp4?raw=1'},
+  {j:23, m:52, p:"Jiménez Cruz, Francisco José", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/lu6vbpumn5rs3ersxkzkl/J23_5_0.mp4?raw=1'},
+  {j:23, m:67, p:"Sainz Hughes, José Luis", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/urt40xrcipr94l01lw7ja/J23_6_0.mp4?raw=1'},
+  {j:23, m:77, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/7udfha01fg9uqj15700e3/J23_7_0.mp4?raw=1'},
+  {j:24, m:21, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/sellq5g7sudfrbae8gvld/J24_0_1.mp4?raw=1'},
+  {j:25, m:48, p:"Tamayo Pacheco, Francisco Javier", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/17cv8utg2yhv9b0wuyyko/J25.mp4?rlkey=7fh8qkuy71smd547bjxzvlqzs&raw=1'},
+  {j:26, m:73, p:"Tamayo Pacheco, Francisco Javier", tipo:"PENALTI", video:'https://www.dropbox.com/scl/fi/p557jxkd28o59gpfzs1uz/J26.mp4?raw=1'},
+  {j:27, m:50, p:"Rodríguez Muñoz, José Luis", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/ypylp9pmuyhw4rcwheeap/J27.mp4?raw=1'},
+  {j:28, m:96, p:"Palacio, Elías Sebastián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/6z583vbybcl7sfvg8gfdu/J28.mp4?raw=1'},
+  {j:29, m:18, p:"Romero Rodríguez, Adrián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/oc73okfnqkwt56zlkol1m/J29_1_0.mp4?raw=1'},
+  {j:29, m:89, p:"Palacio, Elías Sebastián", tipo:"NORMAL", video:'https://www.dropbox.com/scl/fi/dvytcd24ebvcl8yl3ikmn/J29_2_0.mp4?raw=1'},
 ];
 goals.sort((a,b) => a.j !== b.j ? a.j - b.j : a.m - b.m);
 
@@ -1424,9 +1439,10 @@ goals.forEach(g => {
   const isPen = g.tipo === 'PENALTI';
   const isPP  = g.tipo === 'P.P.';
   const badge = isPen ? '<span class="goal-tipo">PEN</span>' : isPP ? '<span class="goal-tipo" style="color:var(--accent-amber);border-color:rgba(245,158,11,0.4)">P.P.</span>' : '';
+  const title = `J${g.j} · ${g.m}' · ${g.p}`;
   const videoBtn = g.video
-    ? `<a href="${g.video}" target="_blank" class="goal-video-btn" style="opacity:1;text-decoration:none;">▶ VÍDEO</a>`
-    : `<span class="goal-video-btn" style="opacity:0.25;cursor:default;">▶ VÍDEO</span>`;
+    ? `<button onclick="openVideoModal('${g.video}','${title.replace(/'/g,"\'")}'" class="goal-video-btn" style="opacity:1;cursor:pointer;background:none;border:1px solid var(--racing-red);color:var(--racing-red);padding:3px 10px;border-radius:4px;font-size:10px;font-weight:600;">▶ VÍDEO</button>`
+    : `<span class="goal-video-btn" style="opacity:0.2;cursor:default;">▶ VÍDEO</span>`;
   goalsDiv.innerHTML += `
     <div class="goal-entry">
       <div class="goal-jornada">J${g.j}</div>
@@ -1436,6 +1452,25 @@ goals.forEach(g => {
       ${videoBtn}
     </div>`;
 });
+// ---- Video Modal ----
+function openVideoModal(url, title) {
+  const modal = document.getElementById('videoModal');
+  const player = document.getElementById('videoModalPlayer');
+  const titleEl = document.getElementById('videoModalTitle');
+  player.src = url;
+  titleEl.textContent = title;
+  modal.style.display = 'flex';
+  player.play().catch(()=>{});
+}
+function closeVideoModal() {
+  const modal = document.getElementById('videoModal');
+  const player = document.getElementById('videoModalPlayer');
+  player.pause();
+  player.src = '';
+  modal.style.display = 'none';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeVideoModal(); });
+
 
 // ---- Populate selects ----
 ['playerSelect','compareA','compareB'].forEach(id => {
